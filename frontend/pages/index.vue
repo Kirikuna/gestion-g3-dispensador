@@ -2,12 +2,11 @@
   <v-row justify="center" align="center">
     <v-col cols="12" sm="8" md="6">
       <v-card class="logo py-4 d-flex justify-center">
-        <NuxtLogo />
-        <VuetifyLogo />
+        <img src="https://jumbo.vtexassets.com/arquivos/ids/423699/Cerveza-58%C2%B0-lata-473-cc.jpg?v=637517622726630000" alt="">
       </v-card>
       <v-card>
         <v-card-title class="headline">
-          Welcome to the Vuetify + Nuxt.js template
+          PROYECTO DISPENSADORES DE ALCOHOL SSSSS
         </v-card-title>
         <v-card-text>
           <p>
