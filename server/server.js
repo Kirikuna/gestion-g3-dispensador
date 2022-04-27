@@ -1,6 +1,6 @@
 const express = require("express");
+const routes = require('./routes/index');
 const app = express();
-
 // Configuring port
 const port = process.env.PORT || 9000;
 
@@ -8,6 +8,7 @@ const port = process.env.PORT || 9000;
 app.get("/", (req, res) => {
   res.send("hello world trigger");
 });
+routes(app);
 
 // Listening to port
 app.listen(port);
