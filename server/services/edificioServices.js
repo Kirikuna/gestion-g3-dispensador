@@ -59,7 +59,74 @@ const edificioServices = {
                 data: {},
             };
         }
-    }
+    },
+    async updateEdificio(id, name, color){
+        try {
+            const edificioRef = db.collection('edificios').doc(id);
+            const edificioDoc = await edificioRef.get()
+            if (edificioDoc.exists) {
+                await edificioRef.update( {
+                    Name: name,
+                    Color: color,
+                });
+                return {
+                    status: 'success',
+                    code: 200,
+                    message: 'Edificio updated successfully',
+                    data: {
+                        Name: name,
+                        Color: color,
+                        Rooms: edificioDoc.data().Rooms
+                    },
+                };
+
+            } else {
+                return {
+                    status: 'failed',
+                    code: 404,
+                    message: 'No Edificio data found',
+                    data: {},
+                };
+            }
+        } catch (error){
+            return {
+                status: 'failed',
+                code: 500,
+                message: error.trace,
+                data: {},
+            };
+        }
+    },
+    async deleteEdificio(id){
+        try {
+            const edificioRef = db.collection('edificios').doc(id);
+            const edificioDoc = await edificioRef.get()
+            if (edificioDoc.exists) {
+                await edificioRef.delete();
+                return {
+                    status: 'success',
+                    code: 200,
+                    message: 'Edificio deleted successfully',
+                    data: id,
+                };
+
+            } else {
+                return {
+                    status: 'failed',
+                    code: 404,
+                    message: 'No Edificio data found',
+                    data: {},
+                };
+            }
+        } catch (error){
+            return {
+                status: 'failed',
+                code: 500,
+                message: error.trace,
+                data: {},
+            };
+        }
+    },
 }
 
 module.exports = edificioServices;
