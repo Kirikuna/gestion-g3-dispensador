@@ -4,7 +4,6 @@ const db = firebase.firestore();
 const edificioServices = {
     async addEdificio(name, color){
         try {
-            console.log(name, color)
             const edificiosRef = db.collection('edificios');
             const edificioAdd = await edificiosRef.add({
                 Name: name,
@@ -23,6 +22,35 @@ const edificioServices = {
                     Rooms: [],
                 },
             };
+        } catch (error){
+            return {
+                status: 'failed',
+                code: 500,
+                message: error.trace,
+                data: {},
+            };
+        }
+    },
+    async getEdificio(id){
+        try {
+            const edificioRef = db.collection('edificios').doc(id);
+            const edificioDoc = await edificioRef.get()
+            if (edificioDoc.exists) {
+                return {
+                    status: 'success',
+                    code: 200,
+                    message: 'Edificio data found',
+                    data: edificioDoc.data(),
+                };
+
+            } else {
+                return {
+                    status: 'failed',
+                    code: 404,
+                    message: 'No Edificio data found',
+                    data: {},
+                };
+            }
         } catch (error){
             return {
                 status: 'failed',
