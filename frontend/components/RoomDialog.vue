@@ -10,27 +10,33 @@
           v-bind='attrs'
           v-on='on'
         >
-          Agregar edificio
+          Agregar sala
         </v-btn>
       </template>
       <v-card>
         <v-card-title>
-          <span class='text-h5'>Agregar edificio</span>
+          <span class='text-h5'>Agregar sala</span>
         </v-card-title>
         <v-card-text>
           <v-container>
             <v-row>
-              <v-form v-model='buildingForm.valid'>
+              <v-form v-model='roomForm.valid'>
                 <v-col cols='12'>
                   <v-text-field
                     label='Nombre'
-                    v-model='buildingForm.building.name'
-                    :rules='buildingForm.nameRules'
+                    v-model='roomForm.room.name'
+                    :rules='roomForm.nameRules'
                     required
                   ></v-text-field>
                 </v-col>
+                <v-select
+                  v-model='roomForm.building'
+                  :items='roomForm.buildings'
+                  item-text='name'
+                  return-object
+                >
+                </v-select>
                 <v-col cols='12'>
-                  <v-color-picker v-model='buildingForm.building.color'></v-color-picker>
                 </v-col>
               </v-form>
             </v-row>
@@ -41,8 +47,8 @@
           <v-btn
             color='blue darken-1'
             text
-            @click='dialog = false; saveBuilding()'
-            :disabled='!buildingForm.valid'
+            @click='dialog = false; saveRoom()'
+            :disabled='!roomForm.valid'
           >
             Guardar
           </v-btn>
@@ -65,25 +71,23 @@ export default {
       dialog: false,
       type: 'hex',
       color: '#ffffff',
-      buildingForm: {
+      roomForm: {
         valid: false,
         nameRules: [
           v => !!v || 'El nombre es requerido',
         ],
-
-        building: {
+        buildings: this.$store.state.buildings.buildings,
+        building: {},
+        room: {
           name: '',
-          color: '',
-          rooms: [],
         },
 
       },
     };
   },
   methods: {
-    saveBuilding() {
-      console.log(this.color);
-      this.$store.commit('buildings/addBuilding', this.buildingForm.building);
+    saveRoom() {
+      
     },
   },
 };

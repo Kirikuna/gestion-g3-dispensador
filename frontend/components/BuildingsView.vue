@@ -4,6 +4,9 @@
       <v-col cols='4'>
         <BuildingDialog />
       </v-col>
+      <v-col cols='4'>
+        <RoomDialog />
+      </v-col>
       <v-col cols='12' md='6'>
         <v-row>
           <v-col cols='12' md='6'>
