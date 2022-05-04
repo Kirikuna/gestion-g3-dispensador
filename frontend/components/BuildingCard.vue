@@ -3,7 +3,7 @@
     class='mx-auto'
     max-width='344'
   >
-    <v-toolbar :color='building.color'>
+    <v-toolbar :color='building.color' height='20px'>
 
     </v-toolbar>
     <v-card-title class='justify-center'>
@@ -12,7 +12,7 @@
 
     <v-card-text class='pa-0'>
       <v-row>
-        <v-col cols='12' v-for='room in building.rooms' :key='room'>
+        <v-col cols='12' v-for='room in building.rooms' :key='room.name'>
           <room-card class='room-card' :room='room' />
         </v-col>
       </v-row>
