@@ -83,7 +83,6 @@ export default {
         building: {},
         room: {
           Name: '',
-          State: 0,
         },
 
       },
@@ -93,10 +92,14 @@ export default {
     async saveRoom() {
       const room = await this.$axios.post(`${process.env.NUXT_ENV_BACKEND}/sala/add-sala`, {
         eid: this.roomForm.building.id,
-        name: this.roomForm.Name,
+        name: this.roomForm.room.Name,
       }).then((data) => {
-
+        return data.data.data;
+      }).catch((error)=>{
+        console.log(error);
       });
+
+      console.log(room);
 
     },
     loadBuildings() {
