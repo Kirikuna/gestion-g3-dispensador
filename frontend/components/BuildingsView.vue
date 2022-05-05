@@ -40,9 +40,17 @@ export default {
   },
   computed: {
     buildings() {
-      return this.$store.state.buildings.buildings;
+      return this.$store.getters['buildings/getBuildings'];
     },
 
+  },
+  methods: {
+    loadBuildings() {
+      this.$store.dispatch('buildings/getBuildings');
+    },
+  },
+  created() {
+    this.loadBuildings();
   },
 };
 </script>
