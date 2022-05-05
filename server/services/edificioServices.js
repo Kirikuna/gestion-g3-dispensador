@@ -60,6 +60,31 @@ const edificioServices = {
             };
         }
     },
+    async getAllEdificios(){
+        try {
+            const edificios = []
+            const edificiosRef = db.collection('edificios');
+            const snapshot = await edificiosRef.get();
+            snapshot.forEach(doc => {
+                edificios.push({ id: doc.id, ...doc.data()})
+            })
+
+            return {
+                status: 'success',
+                code: 200,
+                message: 'Edificios found',
+                data: edificios,
+            };
+
+        } catch (error){
+            return {
+                status: 'failed',
+                code: 500,
+                message: error.trace,
+                data: {},
+            };
+        }
+    },
     async updateEdificio(id, name, color){
         try {
             const edificioRef = db.collection('edificios').doc(id);
