@@ -34,7 +34,7 @@ const salaController = {
             });
     },
     async getSalasOfEdificio (req, res) {
-        const {eid} = req.body;
+        const {eid} = req.params;
         salaServices
             .getSalasOfEdificio(eid)
             .then((salas) => {
