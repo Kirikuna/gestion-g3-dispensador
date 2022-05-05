@@ -21,7 +21,6 @@ export const actions = {
       name: payload.Name,
       color: payload.Color,
     }).then((building) => {
-      console.log(building.data.data);
       context.commit('addBuilding', building.data.data);
     }).catch((error) => {
       console.log(error);

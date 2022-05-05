@@ -29,12 +29,17 @@ export default {
 
   },
   methods: {
-    getRooms() {
-      this.Rooms = this.$axios.get(`${process.env.NUXT_ENV_BACKEND}/sala/get-edificio-salas/${this.building.id}`);
+    async getRooms() {
+      this.Rooms = await this.$axios.get(`${process.env.NUXT_ENV_BACKEND}/sala/get-edificio-salas/${this.building.id}`).then((data) => {
+        return data.data.data;
+      }).catch((error) => {
+        console.log(error);
+      });
+      console.log(this.Rooms);
     },
   },
   mounted() {
-    console.log(this.building);
+    this.getRooms();
   },
 };
 </script>

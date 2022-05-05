@@ -10,6 +10,7 @@
           class='toggle-button'
           v-bind='attrs'
           v-on='on'
+          @click='loadBuildings'
           block
         >
           Agregar sala
@@ -26,7 +27,7 @@
                 <v-col cols='12'>
                   <v-text-field
                     label='Nombre'
-                    v-model='roomForm.room.name'
+                    v-model='roomForm.room.Name'
                     :rules='roomForm.nameRules'
                     required
                   ></v-text-field>
@@ -34,7 +35,7 @@
                 <v-select
                   v-model='roomForm.building'
                   :items='roomForm.buildings'
-                  item-text='name'
+                  item-text='Name'
                   return-object
                 >
                 </v-select>
@@ -78,24 +79,36 @@ export default {
         nameRules: [
           v => !!v || 'El nombre es requerido',
         ],
-        buildings: this.$store.state.buildings.buildings,
+        buildings: [],
         building: {},
         room: {
-          name: '',
+          Name: '',
+          State: 0,
         },
 
       },
     };
   },
   methods: {
-    saveRoom() {
+    async saveRoom() {
+      const room = await this.$axios.post(`${process.env.NUXT_ENV_BACKEND}/sala/add-sala`, {
+        eid: this.roomForm.building.id,
+        name: this.roomForm.Name,
+      }).then((data) => {
+
+      });
 
     },
+    loadBuildings() {
+      this.roomForm.buildings = this.$store.getters['buildings/getBuildings'];
+      console.log(this.$store.getters['buildings/getBuildings']);
+    },
   },
+
 };
 </script>
 <style>
-.toggle-button{
+.toggle-button {
   background-color: #65AFFF !important;
   color: white !important;
 }
