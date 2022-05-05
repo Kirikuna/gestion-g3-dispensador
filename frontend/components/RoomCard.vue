@@ -5,7 +5,7 @@
   >
     <v-row justify='space-between'>
       <v-col cols='4'>
-        <v-card-title class='justify-center pa-0' style='font-size: 0.8em'>{{ room.name }}</v-card-title>
+        <v-card-title class='justify-center pa-0' style='font-size: 0.8em'>{{ room.Name }}</v-card-title>
       </v-col>
       <v-col cols='4'>
         <v-card-text class='pa-0'>{{"3-12-1999"}}</v-card-text>
@@ -14,7 +14,7 @@
         <v-card-actions class='pa-0 justify-center' >
             <div
               class="pa-3 rounded-circle d-inline-block"
-              :style='{backgroundColor: room.available ? "green": "red"}'
+              :style='{backgroundColor: this.getColor(room.State)}'
             ></div>
         </v-card-actions>
       </v-col>
@@ -24,5 +24,12 @@
 <script>
 export default {
   props: ['room'],
+  methods:{
+    getColor(State){
+      if(State===0) return "green";
+      else if(State===1) return "yellow";
+      else return "red"
+    }
+  }
 };
 </script>

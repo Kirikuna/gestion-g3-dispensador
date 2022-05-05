@@ -12,7 +12,7 @@
 
     <v-card-text class='pa-0'>
       <v-row>
-        <v-col cols='12' v-for='room in building.Rooms' :key='room.name'>
+        <v-col cols='12' v-for='room in this.Rooms' :key='room.name'>
           <room-card class='room-card' :room='room' />
         </v-col>
       </v-row>
@@ -25,16 +25,22 @@
 export default {
   props: ['building'],
   data: () => {
-    return {};
+    return { Rooms: [] };
+
+  },
+  methods: {
+    getRooms() {
+      this.Rooms = this.$axios.get(`${process.env.NUXT_ENV_BACKEND}/sala/get-edificio-salas/${this.building.id}`);
+    },
   },
   mounted() {
     console.log(this.building);
-  }
+  },
 };
 </script>
 
 <style scoped>
-.room-card{
+.room-card {
   border: 20px black;
 }
 </style>
