@@ -7,8 +7,10 @@
     >
       <template v-slot:activator='{ on, attrs }'>
         <v-btn
+          class='toggle-button'
           v-bind='attrs'
           v-on='on'
+          block
         >
           Agregar sala
         </v-btn>
@@ -87,8 +89,14 @@ export default {
   },
   methods: {
     saveRoom() {
-      
+
     },
   },
 };
 </script>
+<style>
+.toggle-button{
+  background-color: #65AFFF !important;
+  color: white !important;
+}
+</style>

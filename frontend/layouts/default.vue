@@ -1,7 +1,7 @@
 <template>
   <v-app dark>
     <nav-bar/>
-    <v-container>
+    <v-container fluid>
       <Nuxt />
     </v-container>
   </v-app>

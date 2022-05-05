@@ -13,54 +13,19 @@ export const mutations = {
 
 export const actions = {
   async getBuildings(context) {
-    const buildings = [
-      {
-        name: 'Edificio Verde',
-        color: '#2abf4d',
-        rooms: [
-          {
-            name: 'Laboratorio 1',
-            available: true,
-          },
-          {
-            name: 'Laboratorio 2',
-            available: false,
-          },
-        ],
-      },
-      {
-        name: 'Edificio Naranjo',
-        color: '#F57127',
-        rooms: [
-          {
-            name: 'Sala 21',
-            available: false,
-          },
-          {
-            name: 'Sala 22',
-            available: true,
-          },
-        ],
-      },
-      {
-        name: 'Edificio Rojo',
-        color: '#FA5151',
-        rooms: [
-          {
-            name: 'Sala E1',
-            available: true,
-          },
-          {
-            name: 'Sala E2',
-            available: false,
-          },
-        ],
-      },
-    ];
-
-    context.commit('setBuildings', buildings);
-
-
+    const buildings = await this.$axios.get(`${process.env.NUXT_ENV_BACKEND}/edificio/get-all-edificios`);
+    context.commit('setBuildings', buildings.data.data);
+  },
+  async addBuilding(context, payload) {
+    await this.$axios.post(`${process.env.NUXT_ENV_BACKEND}/edificio/add-edificio`, {
+      name: payload.Name,
+      color: payload.Color,
+    }).then((building) => {
+      console.log(building.data.data);
+      context.commit('addBuilding', building.data.data);
+    }).catch((error) => {
+      console.log(error);
+    });
   },
 };
 

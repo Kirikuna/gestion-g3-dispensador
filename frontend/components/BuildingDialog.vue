@@ -7,8 +7,11 @@
     >
       <template v-slot:activator='{ on, attrs }'>
         <v-btn
+          class='toggle-button'
           v-bind='attrs'
           v-on='on'
+          block
+          color='65AFFF'
         >
           Agregar edificio
         </v-btn>
@@ -24,13 +27,13 @@
                 <v-col cols='12'>
                   <v-text-field
                     label='Nombre'
-                    v-model='buildingForm.building.name'
+                    v-model='buildingForm.building.Name'
                     :rules='buildingForm.nameRules'
                     required
                   ></v-text-field>
                 </v-col>
                 <v-col cols='12'>
-                  <v-color-picker v-model='buildingForm.building.color'></v-color-picker>
+                  <v-color-picker v-model='buildingForm.building.Color'></v-color-picker>
                 </v-col>
               </v-form>
             </v-row>
@@ -72,9 +75,9 @@ export default {
         ],
 
         building: {
-          name: '',
-          color: '',
-          rooms: [],
+          Name: '',
+          Color: '',
+          Rooms: [],
         },
 
       },
@@ -83,8 +86,15 @@ export default {
   methods: {
     saveBuilding() {
       console.log(this.color);
-      this.$store.commit('buildings/addBuilding', this.buildingForm.building);
+      this.$store.dispatch('buildings/addBuilding', this.buildingForm.building);
+      //this.$store.commit('buildings/addBuilding', this.buildingForm.building);
     },
   },
 };
 </script>
+<style>
+.toggle-button{
+  background-color: #65AFFF !important;
+  color: white !important;
+}
+</style>
