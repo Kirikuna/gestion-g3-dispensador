@@ -6,7 +6,7 @@ const salaController = {
         salaServices
             .addSala(eid, name)
             .then((sala) => {
-                res.status(edificio.code).json(sala);
+                res.status(sala.code).json(sala);
             })
             .catch((err) => {
                 res.status(500).json(err)
