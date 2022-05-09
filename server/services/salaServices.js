@@ -201,12 +201,9 @@ const salaServices = {
 
                 const matches = (await edificiosRef.get()).docs;
                 for (const edificio of matches) {
-                    console.log('ASD');
-                    console.log(edificio.ref);
                     await edificio.ref.update({
                         Rooms: firebase.firestore.FieldValue.arrayRemove(id),
                     });
-                    console.log('zxc');
                 }
 
                 await salaRef.delete();
