@@ -154,13 +154,19 @@ const edificioServices = {
     async deleteEdificio(id) {
         try {
             const edificioRef = db.collection('edificios').doc(id);
-            const edificioDoc = await edificioRef.get();
             if (edificioDoc.exists) {
+                const edificioSalas = edificioDoc.data().Rooms;
+                for (const sid of edificioSalas) {
+                    const salaRef = db.collection('salas').doc(sid);
+
+                    await salaRef.delete();
+                }
+
                 await edificioRef.delete();
                 return {
                     status: 'success',
                     code: 200,
-                    message: 'Edificio deleted successfully',
+                    message: 'Edificio and Salas deleted successfully',
                     data: id,
                 };
             } else {

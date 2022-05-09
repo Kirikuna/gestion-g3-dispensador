@@ -1,22 +1,22 @@
-const firebase= require('../config/firebase');
+const firebase = require('../config/firebase');
 const db = firebase.firestore();
 
 const salaServices = {
-    async addSala(eid, name){
+    async addSala(eid, name) {
         try {
             const edificioRef = db.collection('edificios').doc(eid);
-            const edificioDoc = await edificioRef.get()
+            const edificioDoc = await edificioRef.get();
             if (edificioDoc.exists) {
                 const salasRef = db.collection('salas');
                 const match = await salasRef.where('Name', '==', name).get();
 
-                if(match.empty){
+                if (match.empty) {
                     const salaAdd = await salasRef.add({
                         Name: name,
                         State: 0,
                         NumberOfReports: 0,
                         Logs: [],
-                    })
+                    });
 
                     await edificioRef.set(
                         {
@@ -47,7 +47,6 @@ const salaServices = {
                         data: {},
                     };
                 }
-
             } else {
                 return {
                     status: 'failed',
@@ -56,7 +55,7 @@ const salaServices = {
                     data: {},
                 };
             }
-        } catch (error){
+        } catch (error) {
             return {
                 status: 'failed',
                 code: 500,
@@ -65,10 +64,10 @@ const salaServices = {
             };
         }
     },
-    async getSala(id){
+    async getSala(id) {
         try {
             const salaRef = db.collection('salas').doc(id);
-            const salaDoc = await salaRef.get()
+            const salaDoc = await salaRef.get();
             if (salaDoc.exists) {
                 return {
                     status: 'success',
@@ -76,7 +75,6 @@ const salaServices = {
                     message: 'Sala data found',
                     data: salaDoc.data(),
                 };
-
             } else {
                 return {
                     status: 'failed',
@@ -85,7 +83,7 @@ const salaServices = {
                     data: {},
                 };
             }
-        } catch (error){
+        } catch (error) {
             return {
                 status: 'failed',
                 code: 500,
@@ -94,14 +92,14 @@ const salaServices = {
             };
         }
     },
-    async getAllSalas(){
+    async getAllSalas() {
         try {
-            const salas = []
+            const salas = [];
             const salasRef = db.collection('salas');
             const snapshot = await salasRef.get();
-            snapshot.forEach(doc => {
-                salas.push({ id: doc.id, ...doc.data()})
-            })
+            snapshot.forEach((doc) => {
+                salas.push({ id: doc.id, ...doc.data() });
+            });
 
             return {
                 status: 'success',
@@ -109,8 +107,7 @@ const salaServices = {
                 message: 'Salas found',
                 data: salas,
             };
-
-        } catch (error){
+        } catch (error) {
             return {
                 status: 'failed',
                 code: 500,
@@ -119,14 +116,14 @@ const salaServices = {
             };
         }
     },
-    async getSalasOfEdificio(eid){
+    async getSalasOfEdificio(eid) {
         try {
             const salas = [];
             const edificioRef = db.collection('edificios').doc(eid);
-            const edificioDoc = await edificioRef.get()
+            const edificioDoc = await edificioRef.get();
             if (edificioDoc.exists) {
                 const edificioSalas = edificioDoc.data().Rooms;
-                for (const sid of edificioSalas){
+                for (const sid of edificioSalas) {
                     const salaRef = db.collection('salas').doc(sid);
                     const salaDoc = (await salaRef.get()).data();
 
@@ -140,7 +137,6 @@ const salaServices = {
                     message: 'Salas retrieved successfully',
                     data: salas,
                 };
-
             } else {
                 return {
                     status: 'failed',
@@ -149,7 +145,7 @@ const salaServices = {
                     data: {},
                 };
             }
-        } catch (error){
+        } catch (error) {
             return {
                 status: 'failed',
                 code: 500,
@@ -158,12 +154,12 @@ const salaServices = {
             };
         }
     },
-    async updateSala(id, name){
+    async updateSala(id, name) {
         try {
             const salaRef = db.collection('salas').doc(id);
-            const salaDoc = await salaRef.get()
+            const salaDoc = await salaRef.get();
             if (salaDoc.exists) {
-                await salaRef.update( {
+                await salaRef.update({
                     Name: name,
                 });
                 return {
@@ -174,10 +170,9 @@ const salaServices = {
                         Name: name,
                         NumberOfReports: salaDoc.data().NumberOfReports,
                         State: salaDoc.data().State,
-                        Logs: salaDoc.data().Rooms
+                        Logs: salaDoc.data().Rooms,
                     },
                 };
-
             } else {
                 return {
                     status: 'failed',
@@ -186,7 +181,7 @@ const salaServices = {
                     data: {},
                 };
             }
-        } catch (error){
+        } catch (error) {
             return {
                 status: 'failed',
                 code: 500,
@@ -195,10 +190,9 @@ const salaServices = {
             };
         }
     },
-    async deleteSala(id){
+    async deleteSala(id) {
         try {
             const salaRef = db.collection('salas').doc(id);
-            const salaDoc = await salaRef.get()
             if (salaDoc.exists) {
                 await salaRef.delete();
                 return {
@@ -207,7 +201,6 @@ const salaServices = {
                     message: 'Sala deleted successfully',
                     data: id,
                 };
-
             } else {
                 return {
                     status: 'failed',
@@ -216,7 +209,7 @@ const salaServices = {
                     data: {},
                 };
             }
-        } catch (error){
+        } catch (error) {
             return {
                 status: 'failed',
                 code: 500,
@@ -225,6 +218,6 @@ const salaServices = {
             };
         }
     },
-}
+};
 
 module.exports = salaServices;
