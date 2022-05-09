@@ -1,15 +1,15 @@
-const firebase= require('../config/firebase');
+const firebase = require('../config/firebase');
 const db = firebase.firestore();
 
 const edificioServices = {
-    async addEdificio(name, color){
+    async addEdificio(name, color) {
         try {
             const edificiosRef = db.collection('edificios');
             const edificioAdd = await edificiosRef.add({
                 Name: name,
                 Color: color,
                 Rooms: [],
-            })
+            });
 
             return {
                 status: true,
@@ -22,7 +22,7 @@ const edificioServices = {
                     Rooms: [],
                 },
             };
-        } catch (error){
+        } catch (error) {
             return {
                 status: 'failed',
                 code: 500,
@@ -31,18 +31,33 @@ const edificioServices = {
             };
         }
     },
-    async getEdificio(id){
+    async getEdificio(id) {
         try {
             const edificioRef = db.collection('edificios').doc(id);
-            const edificioDoc = await edificioRef.get()
+            const edificioDoc = await edificioRef.get();
             if (edificioDoc.exists) {
+                const edificioSalas = edificioDoc.data().Rooms;
+                const salas = [];
+                for (const sid of edificioSalas) {
+                    const salaRef = db.collection('salas').doc(sid);
+                    const salaDoc = (await salaRef.get()).data();
+
+                    salaDoc.id = salaRef.id;
+                    salas.push(salaDoc);
+                }
+
+                const edificio = {
+                    id: edificioDoc.id,
+                    Name: edificioDoc.data().Name,
+                    Color: edificioDoc.data().Color,
+                    Rooms: salas,
+                };
                 return {
                     status: 'success',
                     code: 200,
                     message: 'Edificio data found',
-                    data: edificioDoc.data(),
+                    data: edificio,
                 };
-
             } else {
                 return {
                     status: 'failed',
@@ -51,7 +66,7 @@ const edificioServices = {
                     data: {},
                 };
             }
-        } catch (error){
+        } catch (error) {
             return {
                 status: 'failed',
                 code: 500,
@@ -60,14 +75,30 @@ const edificioServices = {
             };
         }
     },
-    async getAllEdificios(){
+    async getAllEdificios() {
         try {
-            const edificios = []
+            const edificios = [];
             const edificiosRef = db.collection('edificios');
             const snapshot = await edificiosRef.get();
-            snapshot.forEach(doc => {
-                edificios.push({ id: doc.id, ...doc.data()})
-            })
+            for (const edificioDoc of snapshot.docs) {
+                const edificioSalas = edificioDoc.data().Rooms;
+                const salas = [];
+                for (const sid of edificioSalas) {
+                    const salaRef = db.collection('salas').doc(sid);
+                    const salaDoc = (await salaRef.get()).data();
+
+                    salaDoc.id = salaRef.id;
+                    salas.push(salaDoc);
+                }
+
+                const edificio = {
+                    id: edificioDoc.id,
+                    Name: edificioDoc.data().Name,
+                    Color: edificioDoc.data().Color,
+                    Rooms: salas,
+                };
+                edificios.push(edificio);
+            }
 
             return {
                 status: 'success',
@@ -75,8 +106,7 @@ const edificioServices = {
                 message: 'Edificios found',
                 data: edificios,
             };
-
-        } catch (error){
+        } catch (error) {
             return {
                 status: 'failed',
                 code: 500,
@@ -85,12 +115,12 @@ const edificioServices = {
             };
         }
     },
-    async updateEdificio(id, name, color){
+    async updateEdificio(id, name, color) {
         try {
             const edificioRef = db.collection('edificios').doc(id);
-            const edificioDoc = await edificioRef.get()
+            const edificioDoc = await edificioRef.get();
             if (edificioDoc.exists) {
-                await edificioRef.update( {
+                await edificioRef.update({
                     Name: name,
                     Color: color,
                 });
@@ -101,10 +131,9 @@ const edificioServices = {
                     data: {
                         Name: name,
                         Color: color,
-                        Rooms: edificioDoc.data().Rooms
+                        Rooms: edificioDoc.data().Rooms,
                     },
                 };
-
             } else {
                 return {
                     status: 'failed',
@@ -113,7 +142,7 @@ const edificioServices = {
                     data: {},
                 };
             }
-        } catch (error){
+        } catch (error) {
             return {
                 status: 'failed',
                 code: 500,
@@ -122,10 +151,10 @@ const edificioServices = {
             };
         }
     },
-    async deleteEdificio(id){
+    async deleteEdificio(id) {
         try {
             const edificioRef = db.collection('edificios').doc(id);
-            const edificioDoc = await edificioRef.get()
+            const edificioDoc = await edificioRef.get();
             if (edificioDoc.exists) {
                 await edificioRef.delete();
                 return {
@@ -134,7 +163,6 @@ const edificioServices = {
                     message: 'Edificio deleted successfully',
                     data: id,
                 };
-
             } else {
                 return {
                     status: 'failed',
@@ -143,7 +171,7 @@ const edificioServices = {
                     data: {},
                 };
             }
-        } catch (error){
+        } catch (error) {
             return {
                 status: 'failed',
                 code: 500,
@@ -152,6 +180,6 @@ const edificioServices = {
             };
         }
     },
-}
+};
 
 module.exports = edificioServices;
