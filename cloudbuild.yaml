@@ -7,6 +7,14 @@ steps:
     waitFor: ["-"]
   - name: node:16
     entrypoint: npm
+    args: [ "run", "create-env" ]
+    env:
+      - "NUXT_ENV_BACKEND=${_NUXT_ENV_BACKEND}"
+    dir: "frontend"
+    id: "envvars-frontend"
+    waitFor: [ "install-frontend" ]
+  - name: node:16
+    entrypoint: npm
     args: ["run", "build"]
     dir: "frontend"
     id: "build-frontend"
