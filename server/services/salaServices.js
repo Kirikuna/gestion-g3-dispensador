@@ -193,7 +193,22 @@ const salaServices = {
     async deleteSala(id) {
         try {
             const salaRef = db.collection('salas').doc(id);
+            const salaDoc = await salaRef.get();
             if (salaDoc.exists) {
+                const edificiosRef = db
+                    .collection('edificios')
+                    .where('Rooms', 'array-contains', id);
+
+                const matches = (await edificiosRef.get()).docs;
+                for (const edificio of matches) {
+                    console.log('ASD');
+                    console.log(edificio.ref);
+                    await edificio.ref.update({
+                        Rooms: firebase.firestore.FieldValue.arrayRemove(id),
+                    });
+                    console.log('zxc');
+                }
+
                 await salaRef.delete();
                 return {
                     status: 'success',
