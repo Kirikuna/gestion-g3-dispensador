@@ -5,20 +5,9 @@
       width='500'
       persistent
     >
-      <template v-slot:activator='{ on, attrs }'>
-        <v-btn
-          class='toggle-button'
-          v-bind='attrs'
-          v-on='on'
-          block
-          color='65AFFF'
-        >
-          Agregar edificio
-        </v-btn>
-      </template>
       <v-card>
         <v-card-title>
-          <span class='text-h5'>Agregar edificio</span>
+          <span class='text-h5'>{{ title }}</span>
         </v-card-title>
         <v-card-text>
           <v-container>
@@ -63,9 +52,9 @@
 </template>
 <script>
 export default {
+  props: ['btnCaption', 'title', 'building', 'value', 'building', 'action'],
   data() {
     return {
-      dialog: false,
       type: 'hex',
       color: '#ffffff',
       buildingForm: {
@@ -75,8 +64,9 @@ export default {
         ],
 
         building: {
-          Name: '',
-          Color: '',
+          id: this.building ? this.building.id : '',
+          Name: this.building ? this.building.Name : '',
+          Color: this.building ? this.building.Color : '',
           Rooms: [],
         },
 
@@ -85,15 +75,34 @@ export default {
   },
   methods: {
     saveBuilding() {
-      console.log(this.color);
-      this.$store.dispatch('buildings/addBuilding', this.buildingForm.building);
+      switch (this.action) {
+        case 'save':
+          this.$store.dispatch('buildings/addBuilding', this.buildingForm.building);
+          break;
+        case 'edit':
+          this.$store.dispatch('buildings/editBuilding', this.buildingForm.building);
+          break;
+        default:
+          break;
+      }
+
       //this.$store.commit('buildings/addBuilding', this.buildingForm.building);
+    },
+  },
+  computed: {
+    dialog: {
+      get() {
+        return this.value;
+      },
+      set(value) {
+        this.$emit('input', value);
+      },
     },
   },
 };
 </script>
 <style>
-.toggle-button{
+.toggle-button {
   background-color: #65AFFF !important;
   color: white !important;
 }

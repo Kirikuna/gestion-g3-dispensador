@@ -99,6 +99,7 @@ const edificioServices = {
                     code: 200,
                     message: 'Edificio updated successfully',
                     data: {
+                        id: edificioDoc.id,
                         Name: name,
                         Color: color,
                         Rooms: edificioDoc.data().Rooms
