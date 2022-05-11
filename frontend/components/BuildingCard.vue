@@ -7,24 +7,27 @@
 
     </v-toolbar>
 
-    <v-toolbar>
-      <v-card-title class='justify-center'>
+    <v-toolbar height='100%'>
+      <v-card-title
+        class='justify-center d-flex ml-auto mr-auto text-center'
+        style='word-break: break-word'
+      >
+
         {{ building.Name }}
       </v-card-title>
-      <v-row justify='end'>
-        <v-col cols='6'>
-          <v-btn x-small @click.stop='dialog=true'>
-            editar
-          </v-btn>
-          <BuildingDialog
-            v-model='dialog'
-            title='Editar edificio'
-            action='edit'
-            :building='building'
 
-          />
-        </v-col>
-      </v-row>
+
+      <v-btn x-small @click.stop='dialog=true'>
+        editar
+      </v-btn>
+      <BuildingDialog
+        v-model='dialog'
+        title='Editar edificio'
+        action='edit'
+        :building='building'
+
+      />
+
     </v-toolbar>
 
 

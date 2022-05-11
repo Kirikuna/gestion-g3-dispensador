@@ -1,5 +1,3 @@
-import BuildingDialog from '~/components/BuildingDialog';
-
 export const state = () => ({
   buildings: null,
 });
