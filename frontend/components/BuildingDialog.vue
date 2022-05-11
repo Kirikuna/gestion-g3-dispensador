@@ -5,20 +5,9 @@
       width='500'
       persistent
     >
-      <template v-slot:activator='{ on, attrs }'>
-        <v-btn
-          class='toggle-button'
-          v-bind='attrs'
-          v-on='on'
-          block
-          color='65AFFF'
-        >
-          Agregar edificio
-        </v-btn>
-      </template>
       <v-card>
         <v-card-title>
-          <span class='text-h5'>Agregar edificio</span>
+          <span class='text-h5'>{{ title }}</span>
         </v-card-title>
         <v-card-text>
           <v-container>
@@ -40,12 +29,21 @@
           </v-container>
         </v-card-text>
         <v-card-actions>
+          <v-btn
+            color='red darken-1'
+            text
+            @click='delBuilding=true'
+            v-if='this.building'
+          >
+            Eliminar
+          </v-btn>
           <v-spacer></v-spacer>
           <v-btn
             color='blue darken-1'
             text
             @click='dialog = false; saveBuilding()'
             :disabled='!buildingForm.valid'
+
           >
             Guardar
           </v-btn>
@@ -58,25 +56,60 @@
           </v-btn>
         </v-card-actions>
       </v-card>
+      <v-dialog
+        v-model='delBuilding'
+        persistent
+        max-width='290'
+      >
+        <v-card>
+          <v-card-title>
+            {{ 'Eliminar ' + this.building }}
+          </v-card-title>
+          <v-card-text>¿Estás seguro que deseas eliminar?</v-card-text>
+          <v-card-actions>
+            <v-btn
+              color='blue darken-1'
+              text
+              @click='delBuilding=false'
+              :disabled='!buildingForm.valid'
+
+            >
+              Cancelar
+            </v-btn>
+            <v-btn
+              color='red darken-1'
+              text
+              @click='delBuilding=false; deleteBuilding()'
+              v-if='this.building'
+            >
+              Eliminar
+            </v-btn>
+            <v-spacer></v-spacer>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
     </v-dialog>
   </div>
 </template>
 <script>
 export default {
+  props: ['btnCaption', 'title', 'building', 'value', 'building', 'action'],
   data() {
     return {
-      dialog: false,
+      delBuilding: false,
       type: 'hex',
       color: '#ffffff',
       buildingForm: {
+
         valid: false,
         nameRules: [
           v => !!v || 'El nombre es requerido',
         ],
 
         building: {
-          Name: '',
-          Color: '',
+          id: this.building ? this.building.id : '',
+          Name: this.building ? this.building.Name : '',
+          Color: this.building ? this.building.Color : '',
           Rooms: [],
         },
 
@@ -85,15 +118,38 @@ export default {
   },
   methods: {
     saveBuilding() {
-      console.log(this.color);
-      this.$store.dispatch('buildings/addBuilding', this.buildingForm.building);
+      switch (this.action) {
+        case 'save':
+          this.$store.dispatch('buildings/addBuilding', this.buildingForm.building);
+          break;
+        case 'edit':
+          this.$store.dispatch('buildings/editBuilding', this.buildingForm.building);
+          break;
+        default:
+          break;
+      }
+
       //this.$store.commit('buildings/addBuilding', this.buildingForm.building);
     },
+    deleteBuilding() {
+      this.$store.dispatch('buildings/deleteBuilding', this.buildingForm.building.id);
+    },
+  },
+  computed: {
+    dialog: {
+      get() {
+        return this.value;
+      },
+      set(value) {
+        this.$emit('input', value);
+      },
+    },
+
   },
 };
 </script>
 <style>
-.toggle-button{
+.toggle-button {
   background-color: #65AFFF !important;
   color: white !important;
 }

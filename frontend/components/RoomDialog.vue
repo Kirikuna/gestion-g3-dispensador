@@ -104,6 +104,7 @@ export default {
     },
     loadBuildings() {
       this.roomForm.buildings = this.$store.getters['buildings/getBuildings'];
+
       console.log(this.$store.getters['buildings/getBuildings']);
     },
   },

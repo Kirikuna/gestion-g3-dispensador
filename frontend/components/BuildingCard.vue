@@ -6,9 +6,27 @@
     <v-toolbar :color='building.Color' height='20px'>
 
     </v-toolbar>
-    <v-card-title class='justify-center'>
-      {{ building.Name }}
-    </v-card-title>
+
+    <v-toolbar>
+      <v-card-title class='justify-center'>
+        {{ building.Name }}
+      </v-card-title>
+      <v-row justify='end'>
+        <v-col cols='6'>
+          <v-btn x-small @click.stop='dialog=true'>
+            editar
+          </v-btn>
+          <BuildingDialog
+            v-model='dialog'
+            title='Editar edificio'
+            action='edit'
+            :building='building'
+
+          />
+        </v-col>
+      </v-row>
+    </v-toolbar>
+
 
     <v-card-text class='pa-0'>
       <v-row>
@@ -22,10 +40,11 @@
 </template>
 
 <script>
+//TODO: alinear bien el boton de editar
 export default {
   props: ['building'],
   data: () => {
-    return { Rooms: [] };
+    return { dialog: false, Rooms: [] };
 
   },
   methods: {
@@ -35,7 +54,6 @@ export default {
       }).catch((error) => {
         console.log(error);
       });
-      console.log(this.Rooms);
     },
   },
   mounted() {

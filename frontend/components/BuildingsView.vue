@@ -4,7 +4,21 @@
       <v-col>
         <v-row justify='start'>
           <v-col md='4'>
-            <BuildingDialog />
+            <v-btn
+              class='toggle-button'
+              v-bind='attrs'
+              v-on='on'
+              block
+              color='65AFFF'
+              @click.stop='dialog = true'
+            >
+              Agregar edificio
+            </v-btn>
+            <BuildingDialog
+              v-model='dialog'
+              title='Agregar edificio'
+              action='save'
+            />
           </v-col>
           <v-col md='4'>
             <RoomDialog />
@@ -51,6 +65,7 @@ export default {
   methods: {
     loadBuildings() {
       this.$store.dispatch('buildings/getBuildings');
+
     },
   },
   created() {
