@@ -1,6 +1,6 @@
 <template>
   <div>
-    <class-room/>
+    <class-room-view/>
   </div>
 </template>
 
