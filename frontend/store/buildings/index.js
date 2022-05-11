@@ -15,6 +15,10 @@ export const mutations = {
     const item = state.buildings.find((item) => item.id === building.id);
     Object.assign(item, building);
   },
+  deleteBuilding(state, payload) {
+    const index = state.buildings.findIndex(building => building.id === payload);
+    state.buildings.splice(index, 1);
+  },
 };
 
 export const actions = {
@@ -43,6 +47,14 @@ export const actions = {
         console.log(building.data.data);
         context.commit('editBuilding', building.data.data);
       }).catch((error) => {
+        console.log(error);
+      });
+  },
+  async deleteBuilding(context, payload) {
+    await this.$axios.delete(`${process.env.NUXT_ENV_BACKEND}/edificio/delete-edificio/${payload}`)
+      .then((buildingId) => {
+        context.commit('deleteBuilding', buildingId.data.data);
+      }).catch((error)=>{
         console.log(error);
       });
   },

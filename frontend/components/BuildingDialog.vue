@@ -29,12 +29,21 @@
           </v-container>
         </v-card-text>
         <v-card-actions>
+          <v-btn
+            color='red darken-1'
+            text
+            @click='delBuilding=true'
+            v-if='this.building'
+          >
+            Eliminar
+          </v-btn>
           <v-spacer></v-spacer>
           <v-btn
             color='blue darken-1'
             text
             @click='dialog = false; saveBuilding()'
             :disabled='!buildingForm.valid'
+
           >
             Guardar
           </v-btn>
@@ -47,6 +56,38 @@
           </v-btn>
         </v-card-actions>
       </v-card>
+      <v-dialog
+        v-model='delBuilding'
+        persistent
+        max-width='290'
+      >
+        <v-card>
+          <v-card-title>
+            {{ 'Eliminar ' + this.building }}
+          </v-card-title>
+          <v-card-text>¿Estás seguro que deseas eliminar?</v-card-text>
+          <v-card-actions>
+            <v-btn
+              color='blue darken-1'
+              text
+              @click='delBuilding=false'
+              :disabled='!buildingForm.valid'
+
+            >
+              Cancelar
+            </v-btn>
+            <v-btn
+              color='red darken-1'
+              text
+              @click='delBuilding=false; deleteBuilding()'
+              v-if='this.building'
+            >
+              Eliminar
+            </v-btn>
+            <v-spacer></v-spacer>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
     </v-dialog>
   </div>
 </template>
@@ -55,9 +96,11 @@ export default {
   props: ['btnCaption', 'title', 'building', 'value', 'building', 'action'],
   data() {
     return {
+      delBuilding: false,
       type: 'hex',
       color: '#ffffff',
       buildingForm: {
+
         valid: false,
         nameRules: [
           v => !!v || 'El nombre es requerido',
@@ -88,6 +131,9 @@ export default {
 
       //this.$store.commit('buildings/addBuilding', this.buildingForm.building);
     },
+    deleteBuilding() {
+      this.$store.dispatch('buildings/deleteBuilding', this.buildingForm.building.id);
+    },
   },
   computed: {
     dialog: {
@@ -98,6 +144,7 @@ export default {
         this.$emit('input', value);
       },
     },
+
   },
 };
 </script>
