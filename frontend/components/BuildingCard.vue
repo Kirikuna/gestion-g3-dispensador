@@ -30,7 +30,7 @@
 
     <v-card-text class='pa-0'>
       <v-row>
-        <v-col cols='12' v-for='room in Rooms' :key='room.name'>
+        <v-col cols='12' v-for='room in this.building.Rooms' :key='room.name'>
           <room-card class='room-card' :room='room' />
         </v-col>
       </v-row>
@@ -57,7 +57,7 @@ export default {
     },
   },
   mounted() {
-    this.getRooms();
+    //this.getRooms();
   },
 };
 </script>

@@ -89,17 +89,12 @@ export default {
     };
   },
   methods: {
-    async saveRoom() {
-      const room = await this.$axios.post(`${process.env.NUXT_ENV_BACKEND}/sala/add-sala`, {
-        eid: this.roomForm.building.id,
-        name: this.roomForm.room.Name,
-      }).then((data) => {
-        return data.data.data;
-      }).catch((error)=>{
-        console.log(error);
-      });
-
-      console.log(room);
+    saveRoom() {
+      this.$store.dispatch('buildings/addSala', {
+          eid: this.roomForm.building.id,
+          room: this.roomForm.room,
+        },
+      );
 
     },
     loadBuildings() {
