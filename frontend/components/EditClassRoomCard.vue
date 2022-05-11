@@ -7,7 +7,7 @@
         align="center"
         justify="space-around"
       >
-        <v-col md='12'>
+        <v-col cols='12' class='pb-0'>
 
           <v-text-field
             v-model='classRoomNameAux'
@@ -15,8 +15,14 @@
             clearable
           />
         </v-col>
-        <v-btn small color="error" @click='deleteClassRoom'> Eliminar </v-btn>
-        <v-btn small color="primary" @click='saveClassRoom'> Guardar </v-btn>
+        <v-col cols='12' class='pa-0'>
+          <v-card-actions>
+            <v-btn small color="error" @click='deleteClassRoom'> Eliminar </v-btn>
+            <v-spacer/>
+            <v-btn small color="primary" @click='saveClassRoom'> Guardar </v-btn>
+          </v-card-actions>
+        </v-col>
+
       </v-row>
     </v-card-text>
   </v-card>

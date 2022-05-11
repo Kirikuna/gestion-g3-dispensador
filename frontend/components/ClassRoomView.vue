@@ -3,7 +3,7 @@
     class='mx-auto'
     max-width='80%'
   >
-    <v-toolbar color=orange height='20px'/>
+    <v-toolbar :color=colorBuilding height='20px'/>
 
     <v-row>
       <v-col cols='12'>
@@ -19,18 +19,18 @@
       </v-col>
     </v-row>
 
-    <v-row>
+    <v-row >
       <v-col md='2' class='align-center pa-6'>
         <v-card min-height='80px' color='#ffba52' class='align-center'>
-          <v-icon color='white' size='40px' class='align-center'> mdi-alert-octagon </v-icon>
-          <v-card-title class='justify-center'> 1 </v-card-title>
+          <v-card-title class='justify-center'> <v-icon color='white' size='40px'> mdi-alert-octagon </v-icon> </v-card-title>
+          <v-card-title class='justify-center pt-0'> 1 </v-card-title>
           <v-card-subtitle class='text-center'> Reportes </v-card-subtitle>
         </v-card>
       </v-col>
     </v-row>
 
-    <v-dialog v-model='dialog' max-width='30%'>
-      <edit-class-room-card :class-room-name='classRoomName' @dialogAction='dialogAction'></edit-class-room-card>
+    <v-dialog v-model='dialog' min-width='400px' max-width='400px'>
+      <edit-class-room-card :class-room-name='classRoomName' @dialogAction='dialogAction'/>
     </v-dialog>
   </v-card>
 </template>
@@ -41,7 +41,8 @@ export default {
   data() {
     return {
       dialog: false,
-      classRoomName: 'Sala 22'
+      classRoomName: 'Sala 22',
+      colorBuilding: 'orange'
     }
   },
   methods: {
