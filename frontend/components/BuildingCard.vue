@@ -7,30 +7,33 @@
 
     </v-toolbar>
 
-    <v-toolbar>
-      <v-card-title class='justify-center'>
+    <v-toolbar height='100%'>
+      <v-card-title
+        class='justify-center d-flex ml-auto mr-auto text-center'
+        style='word-break: break-word'
+      >
+
         {{ building.Name }}
       </v-card-title>
-      <v-row justify='end'>
-        <v-col cols='6'>
-          <v-btn x-small @click.stop='dialog=true'>
-            editar
-          </v-btn>
-          <BuildingDialog
-            v-model='dialog'
-            title='Editar edificio'
-            action='edit'
-            :building='building'
 
-          />
-        </v-col>
-      </v-row>
+
+      <v-btn x-small @click.stop='dialog=true'>
+        editar
+      </v-btn>
+      <BuildingDialog
+        v-model='dialog'
+        title='Editar edificio'
+        action='edit'
+        :building='building'
+
+      />
+
     </v-toolbar>
 
 
     <v-card-text class='pa-0'>
       <v-row>
-        <v-col cols='12' v-for='room in Rooms' :key='room.name'>
+        <v-col cols='12' v-for='room in this.building.Rooms' :key='room.name'>
           <room-card class='room-card' :room='room' />
         </v-col>
       </v-row>
@@ -57,7 +60,7 @@ export default {
     },
   },
   mounted() {
-    this.getRooms();
+    //this.getRooms();
   },
 };
 </script>

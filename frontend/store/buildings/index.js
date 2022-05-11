@@ -1,5 +1,3 @@
-import BuildingDialog from '~/components/BuildingDialog';
-
 export const state = () => ({
   buildings: null,
 });
@@ -18,6 +16,10 @@ export const mutations = {
   deleteBuilding(state, payload) {
     const index = state.buildings.findIndex(building => building.id === payload);
     state.buildings.splice(index, 1);
+  },
+  addSala(state, payload) {
+    const building = state.buildings.find(building => building.id === payload.eid);
+    building.Rooms.push(payload.room);
   },
 };
 
@@ -54,9 +56,20 @@ export const actions = {
     await this.$axios.delete(`${process.env.NUXT_ENV_BACKEND}/edificio/delete-edificio/${payload}`)
       .then((buildingId) => {
         context.commit('deleteBuilding', buildingId.data.data);
-      }).catch((error)=>{
+      }).catch((error) => {
         console.log(error);
       });
+  },
+  async addSala(context, payload) {
+    await this.$axios.post(`${process.env.NUXT_ENV_BACKEND}/sala/add-sala`, {
+      eid: payload.eid,
+      name: payload.room.Name,
+    }).then((data) => {
+      context.commit('addSala', { eid: payload.eid, room: data.data.data });
+    }).catch((error) => {
+      console.log(error);
+    });
+
   },
 };
 
