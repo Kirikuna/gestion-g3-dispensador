@@ -10,25 +10,40 @@
       <v-spacer></v-spacer>
 
       <v-btn-toggle group borderless>
-        <v-btn color='#65AFFF' depressed v-if='selectedUser === "Admin" || selectedUser === "Reponedor"'>
+        <v-btn color='#65AFFF'
+               depressed
+               v-if='selectedUser === "Admin" || selectedUser === "Reponedor"'
+                to='/indevelopment' nuxt>
           Todos los edificios
         </v-btn>
-        <v-spacer v-if='selectedUser === "Admin" || selectedUser === "Reponedor"'></v-spacer>
-        <v-btn color='#65AFFF' depressed v-if='selectedUser === "Reponedor"'>
+        <v-spacer
+          v-if='selectedUser === "Admin" || selectedUser === "Reponedor"'></v-spacer>
+        <v-btn color='#65AFFF'
+               depressed
+               v-if='selectedUser === "Reponedor"'>
           Reportes Activos
         </v-btn>
-        <v-spacer v-if='selectedUser === "Reponedor"'></v-spacer>
-        <v-btn color='#65AFFF' depressed v-if='selectedUser === "Admin"'>
+        <v-spacer
+          v-if='selectedUser === "Reponedor"'></v-spacer>
+        <v-btn color='#65AFFF'
+               depressed
+               v-if='selectedUser === "Admin"'
+               to='/indevelopment' nuxt>
           Personal
         </v-btn>
-        <v-spacer v-if='selectedUser === "Admin"'></v-spacer>
-        <v-btn color='#65AFFF' depressed v-if='selectedUser === "Admin"'>
+        <v-spacer
+          v-if='selectedUser === "Admin"'></v-spacer>
+        <v-btn color='#65AFFF'
+               depressed
+               v-if='selectedUser === "Admin"'
+               to='/' nuxt>
           Gestionar edificios
         </v-btn>
-        <v-spacer v-if='selectedUser === "Admin"'></v-spacer>
+        <v-spacer
+          v-if='selectedUser === "Admin"'></v-spacer>
       </v-btn-toggle>
-      <v-spacer></v-spacer>
 
+      <v-spacer></v-spacer>
 
       <v-select
         v-model='selectedUser'
