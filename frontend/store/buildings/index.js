@@ -91,6 +91,22 @@ export const actions = {
         console.log(error)
       })
   },
+  async deleteClassRoom(context, payload) {
+    await this.$axios
+      .delete(`${process.env.NUXT_ENV_BACKEND}/sala/delete-sala/${payload.id}`)
+      .catch((error) => {
+        console.log(error)
+      })
+  },
+  async updateClassRoom(context, payload) {
+    await this.$axios
+      .put(`${process.env.NUXT_ENV_BACKEND}/sala/update-sala/${payload.id}`, {
+        name: payload.name,
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+  },
 }
 
 export const getters = {

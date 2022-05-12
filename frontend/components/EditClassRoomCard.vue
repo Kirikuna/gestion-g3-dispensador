@@ -17,7 +17,7 @@
         </v-col>
         <v-col cols='12' class='pa-0'>
           <v-card-actions>
-            <v-btn small color="error" @click='deleteClassRoom'> Eliminar </v-btn>
+            <v-btn small color="error" @click='deleteClassRoom' href='/'> Eliminar </v-btn>
             <v-spacer/>
             <v-btn small color="primary" @click='saveClassRoom'> Guardar </v-btn>
           </v-card-actions>
@@ -36,6 +36,10 @@ export default {
       type: String,
       default: null,
     },
+    classRoomId: {
+      type: String,
+      default: null,
+    },
   },
   data(){
     return {
@@ -48,13 +52,12 @@ export default {
     },
   },
   methods:{
-    deleteClassRoom() {
-      console.log('delete');
-      this.$emit('dialogAction', this.classRoomName);
+    async deleteClassRoom() {
+      await this.$store.dispatch('buildings/deleteClassRoom', {id: this.classRoomId});
     },
-    saveClassRoom() {
-      console.log('save');
-      this.$emit('dialogAction', this.classRoomName);
+    async saveClassRoom() {
+      await this.$store.dispatch('buildings/updateClassRoom', {id: this.classRoomId, name: this.classRoomNameAux});
+      this.$emit('dialogAction', this.classRoomNameAux);
     },
   }
 };

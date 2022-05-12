@@ -32,7 +32,7 @@
     </v-row>
 
     <v-dialog v-model='dialog' min-width='400px' max-width='400px'>
-      <edit-class-room-card :class-room-name='classRoomName' @dialogAction='dialogAction'/>
+      <edit-class-room-card :class-room-name='classRoomName' :classRoomId='classRoomId' @dialogAction='dialogAction'/>
     </v-dialog>
   </v-card>
 </template>
@@ -57,7 +57,7 @@ export default {
   data() {
     return {
       dialog: false,
-      classRoomName: 'Sala 22',
+      classRoomName: null,
       classRoom: null,
     }
   },

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <class-room-view :classRoomId='$route.params.id' :colorBuilding='$route.params.bColor' :nameBuilding='$route.params.bName'/>
+    <class-room-view :classRoomId='$route.query.id' :colorBuilding='$route.query.bColor' :nameBuilding='$route.query.bName'/>
   </div>
 </template>
 
