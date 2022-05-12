@@ -1,13 +1,11 @@
 <template>
-  <div>
+  <div class='mb-10'>
     <v-row justify='space-between'>
       <v-col>
         <v-row justify='start'>
           <v-col md='4'>
             <v-btn
               class='toggle-button'
-              v-bind='attrs'
-              v-on='on'
               block
               color='65AFFF'
               @click.stop='dialog = true'

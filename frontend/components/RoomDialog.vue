@@ -95,12 +95,13 @@ export default {
           room: this.roomForm.room,
         },
       );
+      this.roomForm.building = {};
+      this.roomForm.room.Name = '';
 
     },
     loadBuildings() {
       this.roomForm.buildings = this.$store.getters['buildings/getBuildings'];
 
-      console.log(this.$store.getters['buildings/getBuildings']);
     },
   },
 
