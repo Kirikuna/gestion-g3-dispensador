@@ -30,11 +30,10 @@
 
     </v-toolbar>
 
-
     <v-card-text class='pa-0'>
       <v-row>
-        <v-col cols='12' v-for='room in this.building.Rooms' :key='room.name'>
-          <room-card class='room-card' :room='room' />
+        <v-col cols='12' v-for='room in building.Rooms' :key='room.id'>
+          <room-card class='room-card' :room='room' @click.native='$router.push({name: "classrooms", query: { id: room.id, bName: building.Name, bColor: building.Color}})'/>
         </v-col>
       </v-row>
     </v-card-text>
@@ -59,14 +58,12 @@ export default {
       });
     },
   },
-  mounted() {
-    //this.getRooms();
-  },
 };
 </script>
 
 <style scoped>
 .room-card {
   border: 20px black;
+  cursor: pointer;
 }
 </style>
