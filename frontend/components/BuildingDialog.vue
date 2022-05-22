@@ -63,7 +63,7 @@
       >
         <v-card>
           <v-card-title>
-            {{ 'Eliminar ' + this.building }}
+            {{ 'Eliminar'}}
           </v-card-title>
           <v-card-text>¿Estás seguro que deseas eliminar?</v-card-text>
           <v-card-actions>

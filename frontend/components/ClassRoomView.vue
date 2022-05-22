@@ -34,6 +34,7 @@
     <v-dialog v-model='dialog' min-width='400px' max-width='400px'>
       <edit-class-room-card :class-room-name='classRoomName' :classRoomId='classRoomId' @dialogAction='dialogAction'/>
     </v-dialog>
+    <QRGeneration/>
   </v-card>
 </template>
 
