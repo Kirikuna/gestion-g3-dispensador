@@ -10,5 +10,6 @@ salaRouter.get('/get-edificio-salas/:eid', salaController.getSalasOfEdificio);
 salaRouter.put('/update-sala/:id', salaController.updateSala);
 salaRouter.delete('/delete-sala/:id', salaController.deleteSala);
 salaRouter.delete('/get-logs/:id', salaController.getLogs);
+salaRouter.put('/solve-sala/:id', salaController.solveSala);
 
 module.exports = salaRouter;

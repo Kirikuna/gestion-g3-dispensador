@@ -78,6 +78,18 @@ const salaController = {
                 res.status(500).json(err);
             });
     },
+	async solveSala(req, res) {
+        const { id } = req.params;
+        salaServices
+            .solveSala(id)
+            .then((sala) => {
+                res.status(sala.code).json(sala);
+            })
+            .catch((err) => {
+                res.status(500).json(err);
+            });
+    },
+};
 };
 
 module.exports = salaController;
