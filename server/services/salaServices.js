@@ -15,7 +15,11 @@ const salaServices = {
                         Name: name,
                         State: 0,
                         NumberOfReports: 0,
-                        Logs: [],
+                    });
+
+                    await salaAdd.collection('logs').add({
+                        Report: 'Creada',
+                        Timestamp: firebase.firestore.Timestamp.now(),
                     });
 
                     await edificioRef.set(
@@ -36,7 +40,6 @@ const salaServices = {
                             Name: name,
                             State: 0,
                             NumberOfReports: 0,
-                            Logs: [],
                         },
                     };
                 } else {
@@ -212,6 +215,84 @@ const salaServices = {
                     code: 200,
                     message: 'Sala deleted successfully',
                     data: id,
+                };
+            } else {
+                return {
+                    status: 'failed',
+                    code: 404,
+                    message: 'No Sala data found',
+                    data: {},
+                };
+            }
+        } catch (error) {
+            return {
+                status: 'failed',
+                code: 500,
+                message: error.trace,
+                data: {},
+            };
+        }
+    },
+    async getLogs(id) {
+        try {
+            const salaRef = db.collection('salas').doc(id);
+            const salaDoc = await salaRef.get();
+            if (salaDoc.exists) {
+                const logs = [];
+
+                const logsCol = await salaRef.collection('logs').get();
+
+                for (const logDoc of logsCol.docs) {
+                    const log = {
+                        id: logDoc.id,
+                        Report: logDoc.data().Report,
+                        Timestamp: logDoc.data().Timestamp,
+                    };
+                    logs.push(log);
+                }
+
+                return {
+                    status: 'success',
+                    code: 200,
+                    message: 'Logs found',
+                    data: logs,
+                };
+            } else {
+                return {
+                    status: 'failed',
+                    code: 404,
+                    message: 'No Sala data found',
+                    data: {},
+                };
+            }
+        } catch (error) {
+            return {
+                status: 'failed',
+                code: 500,
+                message: error.trace,
+                data: {},
+            };
+        }
+    },
+    async solveSala(id) {
+        try {
+            const salaRef = db.collection('salas').doc(id);
+            const salaDoc = await salaRef.get();
+            if (salaDoc.exists) {
+                await salaRef.update({
+                    State: 0,
+                    NumberOfReports: 0,
+                });
+                return {
+                    status: 'success',
+                    code: 200,
+                    message: 'Sala updated successfully',
+                    data: {
+                        Name: name,
+                        NumberOfReports: salaDoc.data().NumberOfReports,
+                        State: salaDoc.data().State,
+                        Logs: salaDoc.data().Rooms,
+                    },
                 };
             } else {
                 return {

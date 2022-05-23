@@ -1,18 +1,18 @@
 const salaServices = require('../services/salaServices');
 
 const salaController = {
-    async addSala (req, res) {
-        const {eid, name} = req.body;
+    async addSala(req, res) {
+        const { eid, name } = req.body;
         salaServices
             .addSala(eid, name)
             .then((sala) => {
                 res.status(sala.code).json(sala);
             })
             .catch((err) => {
-                res.status(500).json(err)
-            })
+                res.status(500).json(err);
+            });
     },
-    async getSala (req, res) {
+    async getSala(req, res) {
         const { id } = req.params;
         salaServices
             .getSala(id)
@@ -23,7 +23,7 @@ const salaController = {
                 res.status(500).json(err);
             });
     },
-    async getAllSalas (req, res) {
+    async getAllSalas(req, res) {
         salaServices
             .getAllSalas()
             .then((salas) => {
@@ -33,8 +33,8 @@ const salaController = {
                 res.status(500).json(err);
             });
     },
-    async getSalasOfEdificio (req, res) {
-        const {eid} = req.params;
+    async getSalasOfEdificio(req, res) {
+        const { eid } = req.params;
         salaServices
             .getSalasOfEdificio(eid)
             .then((salas) => {
@@ -44,9 +44,9 @@ const salaController = {
                 res.status(500).json(err);
             });
     },
-    async updateSala (req, res) {
+    async updateSala(req, res) {
         const { id } = req.params;
-        const {name} = req.body;
+        const { name } = req.body;
         salaServices
             .updateSala(id, name)
             .then((sala) => {
@@ -56,7 +56,7 @@ const salaController = {
                 res.status(500).json(err);
             });
     },
-    async deleteSala (req, res) {
+    async deleteSala(req, res) {
         const { id } = req.params;
         salaServices
             .deleteSala(id)
@@ -66,7 +66,29 @@ const salaController = {
             .catch((err) => {
                 res.status(500).json(err);
             });
-    }
-}
+    },
+    async getLogs(req, res) {
+        const { id } = req.params;
+        salaServices
+            .getLogs(id)
+            .then((sala) => {
+                res.status(sala.code).json(sala);
+            })
+            .catch((err) => {
+                res.status(500).json(err);
+            });
+    },
+    async solveSala(req, res) {
+        const { id } = req.params;
+        salaServices
+            .solveSala(id)
+            .then((sala) => {
+                res.status(sala.code).json(sala);
+            })
+            .catch((err) => {
+                res.status(500).json(err);
+            });
+    },
+};
 
 module.exports = salaController;
