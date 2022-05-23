@@ -78,7 +78,7 @@ const salaController = {
                 res.status(500).json(err);
             });
     },
-	async solveSala(req, res) {
+    async solveSala(req, res) {
         const { id } = req.params;
         salaServices
             .solveSala(id)
@@ -89,7 +89,6 @@ const salaController = {
                 res.status(500).json(err);
             });
     },
-};
 };
 
 module.exports = salaController;
