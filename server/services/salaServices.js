@@ -230,6 +230,43 @@ const salaServices = {
             };
         }
     },
+    async solveSala(id) {
+        try {
+            const salaRef = db.collection('salas').doc(id);
+            const salaDoc = await salaRef.get();
+            if (salaDoc.exists) {
+                await salaRef.update({
+                    State: 0,
+                    NumberOfReports: 0,
+                });
+                return {
+                    status: 'success',
+                    code: 200,
+                    message: 'Sala updated successfully',
+                    data: {
+                        Name: name,
+                        NumberOfReports: salaDoc.data().NumberOfReports,
+                        State: salaDoc.data().State,
+                        Logs: salaDoc.data().Rooms,
+                    },
+                };
+            } else {
+                return {
+                    status: 'failed',
+                    code: 404,
+                    message: 'No Sala data found',
+                    data: {},
+                };
+            }
+        } catch (error) {
+            return {
+                status: 'failed',
+                code: 500,
+                message: error.trace,
+                data: {},
+            };
+        }
+    },
 };
 
 module.exports = salaServices;
