@@ -31,27 +31,38 @@
       </v-col>
       <v-spacer></v-spacer>
       <v-col cols="12" md='2' xs="12" sm="12" align-self='end' class="pa-6">
-        <v-btn min-width="100%" max-width="100%" @click="ruta()">
+        <v-btn min-width="100%" max-width="100%" @click="solve">
           Solucionar
         </v-btn>
       </v-col>
     </v-row>
-
-    <v-row justify="center">
-      <v-cols cols="12" md='12' xs="12" sm="12" class="pa-6">
         <v-data-table
           :headers="headers"
-          :items="desserts"
-          :items-per-page="5"
+          :items="logs"
+          :items-per-page="10"
           class="pointer elevation-1"
         ></v-data-table>
-      </v-cols>
-    </v-row>
 
     <v-dialog v-model='dialog' min-width='400px' max-width='400px'>
       <edit-class-room-card :class-room-name='classRoomName' :classRoomId='classRoomId' @dialogAction='dialogAction'/>
     </v-dialog>
     <QRGeneration/>
+    <v-snackbar
+      v-model="snackbar"
+      :timeout="timeout"
+      color="success"
+    >
+      {{ text }}
+      <template v-slot:action="{ attrs }">
+        <v-btn
+          text
+          v-bind="attrs"
+          @click="snackbar = false"
+        >
+          Close
+        </v-btn>
+      </template>
+    </v-snackbar>
   </v-card>
 </template>
 
@@ -77,32 +88,19 @@ export default {
       dialog: false,
       classRoomName: null,
       classRoom: null,
+      snackbar: false,
+      timeout: 2000,
+      text: 'Reporte solucionado',
       headers: [
           {
             text: 'Mensaje',
-            align: 'start',
-            value: 'report',
+            align: 'center',
+            value: 'report'
           },
-          { text: 'Fecha de reporte', value: 'date' },
-          { text: 'Hora de reporte', value: 'hour' },
+          { text: 'Fecha de reporte', value: 'date', align: 'center'},
+          { text: 'Hora de reporte', value: 'hour' , align: 'center'},
         ],
-        desserts: [
-          {
-            report: 'Sin Alcohol',
-            date: '22/04/2022',
-            hour: '19:00',
-          },
-          {
-            report: 'Rellenado',
-            date: '22/04/2022',
-            hour: '08:00',
-          },
-          {
-            report: 'Sin batería',
-            date: '21/04/2022',
-            hour: '14:00',
-          },
-        ],
+      logs: [],
     }
   },
   methods: {
@@ -114,12 +112,20 @@ export default {
       this.classRoom = this.classRoom.data.data;
       this.classRoomName = this.classRoom.Name;
     },
-    ruta(){
-      console.log(this.$route.fullPath)
+    async getLogs(){
+      const log = await this.$axios.get(`${process.env.NUXT_ENV_BACKEND}/sala/get-logs/${this.classRoomId}`);
+      this.logs = log.data.data;
+      console.log(log.data.data);
+    },
+    async solve(){
+      this.snackbar = true;
+      const solve = await this.$axios.put(`${process.env.NUXT_ENV_BACKEND}/sala/solve-sala/${this.classRoomId}`);
+      console.log(solve);
     }
   },
-  beforeMount() {
-    this.getRoom();
+  async beforeMount() {
+    await this.getRoom();
+    await this.getLogs();
   }
 };
 </script>
