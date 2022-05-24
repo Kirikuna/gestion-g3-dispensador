@@ -6,7 +6,7 @@
         <qrcode-vue class-name='mx-auto' :value='qrValue' size='250'></qrcode-vue>
       </v-card-title>
       <v-card-title class='justify-center'>Link:
-        dispensadores.gptech3.com/reportar?sala=sala22&edificio=edificio-verde
+        {{ qrValue }}
       </v-card-title>
       <v-card-actions class='justify-center'>
         <v-btn class='toggle-button'>
@@ -28,6 +28,18 @@ export default {
     return {
       qrValue: 'https://www.google.cl/',
     };
+  },
+  methods: {
+    generateQRlink() {
+      console.log();
+      return `${process.env.NUXT_ENV_DEPLOY_LINK}/reportar?${new URLSearchParams(this.$route.query).toString()}`;
+    },
+  },
+  mounted() {
+    console.log(this.$route.query);
+    console.log(this.$route.name);
+    const qrLink = this.generateQRlink();
+    this.qrValue = qrLink ? qrLink : 'No Link Available';
   },
 
 };
