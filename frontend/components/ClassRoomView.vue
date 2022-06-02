@@ -106,8 +106,10 @@ export default {
     }
   },
   methods: {
-    dialogAction() {
+    dialogAction(data) {
       this.dialog = !this.dialog;
+      if (data !== undefined)
+        this.classRoomName = data;
     },
     async getRoom() {
       this.classRoom = await this.$axios.get(`${process.env.NUXT_ENV_BACKEND}/sala/get-sala/${this.classRoomId}`);
