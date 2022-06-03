@@ -1,14 +1,13 @@
 <template>
   <div>
-    <v-card >
-      <v-card-title class='justify-center'>QR de reporte: </v-card-title>
-      <v-img
-        class='mx-auto'
-        src='https://mike42.me/blog/images/2012-02-12-bitrevis-qr-code.png'
-        width="250"
-        height="250"
-      ></v-img>
-      <v-card-title class='justify-center'>Link: dispensadores.gptech3.com/reportar?sala=sala22&edificio=edificio-verde</v-card-title>
+    <v-card>
+      <v-card-title class='justify-center'>QR de reporte:</v-card-title>
+      <v-card-title class='justify-center'>
+        <qrcode-vue class-name='mx-auto' :value='qrValue' size='250'></qrcode-vue>
+      </v-card-title>
+      <v-card-title class='justify-center'>Link:
+        {{ qrValue }}
+      </v-card-title>
       <v-card-actions class='justify-center'>
         <v-btn class='toggle-button'>
           Descargar imagen
@@ -20,8 +19,29 @@
 </template>
 
 <script>
+import QrcodeVue from 'qrcode.vue';
+
 export default {
   name: 'QRGeneration',
+  components: { QrcodeVue },
+  data: () => {
+    return {
+      qrValue: 'https://www.google.cl/',
+    };
+  },
+  methods: {
+    generateQRlink() {
+      console.log();
+      return `${process.env.NUXT_ENV_DEPLOY_LINK}/reportar?${new URLSearchParams(this.$route.query).toString()}`;
+    },
+  },
+  mounted() {
+    console.log(this.$route.query);
+    console.log(this.$route.name);
+    const qrLink = this.generateQRlink();
+    this.qrValue = qrLink ? qrLink : 'No Link Available';
+  },
+
 };
 </script>
 
