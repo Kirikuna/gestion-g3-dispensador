@@ -173,7 +173,6 @@ const salaServices = {
                         Name: name,
                         NumberOfReports: salaDoc.data().NumberOfReports,
                         State: salaDoc.data().State,
-                        Logs: salaDoc.data().Rooms,
                     },
                 };
             } else {
@@ -288,10 +287,9 @@ const salaServices = {
                     code: 200,
                     message: 'Sala updated successfully',
                     data: {
-                        Name: name,
-                        NumberOfReports: salaDoc.data().NumberOfReports,
-                        State: salaDoc.data().State,
-                        Logs: salaDoc.data().Rooms,
+                        Name: salaDoc.data().name,
+                        NumberOfReports: 0,
+                        State: 0,
                     },
                 };
             } else {
