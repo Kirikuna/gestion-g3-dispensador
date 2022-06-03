@@ -97,10 +97,10 @@ export default {
           {
             text: 'Mensaje',
             align: 'center',
-            value: 'report'
+            value: 'Report'
           },
-          { text: 'Fecha de reporte', value: 'date', align: 'center'},
-          { text: 'Hora de reporte', value: 'hour' , align: 'center'},
+          { text: 'Fecha de reporte', value: 'Date', align: 'center'},
+          { text: 'Hora de reporte', value: 'Time' , align: 'center'},
         ],
       logs: [],
     }
