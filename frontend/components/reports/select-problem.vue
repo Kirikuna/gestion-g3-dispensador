@@ -1,6 +1,6 @@
 <template>
   <v-card
-    class='mx-auto'
+    class='ma-auto'
     max-width='400px'
   >
     <v-toolbar :color="colorBuilding" height='20px'/>
@@ -77,7 +77,7 @@ export default {
     selectedProblem(problem) {
       this.$emit('selectedProblem', problem);
     },
-  }
+  },
 };
 </script>
 
