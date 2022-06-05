@@ -287,6 +287,20 @@ const salaServices = {
                     State: 0,
                     NumberOfReports: 0,
                 });
+
+                const timestamp = firebase.firestore.Timestamp.now();
+
+                await salaRef.collection('logs').add({
+                    Report: 'Solucionado',
+                    Timestamp: timestamp,
+                });
+
+                const ts = timestamp.toDate();
+                const date = ts.toLocaleDateString();
+                const time = ts.toLocaleTimeString();
+
+                const log = { Report: 'Solucionado', Date: date, Time: time };
+
                 return {
                     status: 'success',
                     code: 200,
@@ -295,6 +309,62 @@ const salaServices = {
                         Name: salaDoc.data().name,
                         NumberOfReports: 0,
                         State: 0,
+                        Log: log,
+                    },
+                };
+            } else {
+                return {
+                    status: 'failed',
+                    code: 404,
+                    message: 'No Sala data found',
+                    data: {},
+                };
+            }
+        } catch (error) {
+            return {
+                status: 'failed',
+                code: 500,
+                message: error.trace,
+                data: {},
+            };
+        }
+    },
+    async reportSala(id, report) {
+        try {
+            const salaRef = db.collection('salas').doc(id);
+            const salaDoc = await salaRef.get();
+            if (salaDoc.exists) {
+                let newState = 1;
+                // 9 should be a global parameter or env variable
+                if (salaDoc.data().NumberOfReports >= 9) newState = 2;
+
+                await salaRef.update({
+                    State: newState,
+                    NumberOfReports: salaDoc.data().NumberOfReports + 1,
+                });
+
+                const timestamp = firebase.firestore.Timestamp.now();
+
+                await salaRef.collection('logs').add({
+                    Report: report,
+                    Timestamp: timestamp,
+                });
+
+                const ts = timestamp.toDate();
+                const date = ts.toLocaleDateString();
+                const time = ts.toLocaleTimeString();
+
+                const log = { Report: report, Date: date, Time: time };
+
+                return {
+                    status: 'success',
+                    code: 200,
+                    message: 'Sala reported successfully',
+                    data: {
+                        Name: salaDoc.data().name,
+                        NumberOfReports: salaDoc.data().NumberOfReports + 1,
+                        State: newState,
+                        Log: log,
                     },
                 };
             } else {

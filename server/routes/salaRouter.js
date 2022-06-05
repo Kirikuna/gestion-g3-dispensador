@@ -11,5 +11,6 @@ salaRouter.put('/update-sala/:id', salaController.updateSala);
 salaRouter.delete('/delete-sala/:id', salaController.deleteSala);
 salaRouter.get('/get-logs/:id', salaController.getLogs);
 salaRouter.put('/solve-sala/:id', salaController.solveSala);
+salaRouter.put('/report-sala/:id', salaController.reportSala);
 
 module.exports = salaRouter;
