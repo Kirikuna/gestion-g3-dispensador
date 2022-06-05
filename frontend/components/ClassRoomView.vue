@@ -19,21 +19,50 @@
       </v-col>
     </v-row>
 
-    <v-row >
-      <v-col md='2' class='align-center pa-6'>
-        <v-card min-height='80px' color='#ffba52' class='align-center'>
+    <v-row>
+      <v-col cols="12"  md='2' xs="12" sm="12" class='align-center pa-6' align-self='end'>
+        <v-card min-height='80px' :color='colorReport' class='align-center'>
           <v-card-title class='justify-center'>
             <v-icon color='white' size='40px'> mdi-alert-octagon </v-icon>
           </v-card-title>
-          <v-card-title class='justify-center pt-0'> 1 </v-card-title>
+          <v-card-title class='justify-center pt-0'> {{cantReports}} </v-card-title>
           <v-card-subtitle class='text-center'> Reportes </v-card-subtitle>
         </v-card>
       </v-col>
+      <v-spacer></v-spacer>
+      <v-col cols="12" md='2' xs="12" sm="12" align-self='end' class="pa-6">
+        <v-btn min-width="100%" max-width="100%" @click="solve">
+          Solucionar
+        </v-btn>
+      </v-col>
     </v-row>
+        <v-data-table
+          :headers="headers"
+          :items="logs"
+          :items-per-page="10"
+          class="pointer elevation-1"
+        ></v-data-table>
 
     <v-dialog v-model='dialog' min-width='400px' max-width='400px'>
       <edit-class-room-card :class-room-name='classRoomName' :classRoomId='classRoomId' @dialogAction='dialogAction'/>
     </v-dialog>
+    <QRGeneration/>
+    <v-snackbar
+      v-model="snackbar"
+      :timeout="timeout"
+      color="success"
+    >
+      {{ text }}
+      <template v-slot:action="{ attrs }">
+        <v-btn
+          text
+          v-bind="attrs"
+          @click="snackbar = false"
+        >
+          Close
+        </v-btn>
+      </template>
+    </v-snackbar>
   </v-card>
 </template>
 
@@ -59,20 +88,50 @@ export default {
       dialog: false,
       classRoomName: null,
       classRoom: null,
+      snackbar: false,
+      timeout: 2000,
+      colorReport: '#ffba52',
+      cantReports: 1,
+      text: 'Reporte solucionado',
+      headers: [
+          {
+            text: 'Mensaje',
+            align: 'center',
+            value: 'Report'
+          },
+          { text: 'Fecha de reporte', value: 'Date', align: 'center'},
+          { text: 'Hora de reporte', value: 'Time' , align: 'center'},
+        ],
+      logs: [],
     }
   },
   methods: {
-    dialogAction() {
+    dialogAction(data) {
       this.dialog = !this.dialog;
+      if (data !== undefined)
+        this.classRoomName = data;
     },
     async getRoom() {
       this.classRoom = await this.$axios.get(`${process.env.NUXT_ENV_BACKEND}/sala/get-sala/${this.classRoomId}`);
       this.classRoom = this.classRoom.data.data;
       this.classRoomName = this.classRoom.Name;
+    },
+    async getLogs(){
+      const log = await this.$axios.get(`${process.env.NUXT_ENV_BACKEND}/sala/get-logs/${this.classRoomId}`);
+      this.logs = log.data.data;
+      console.log(log.data.data);
+    },
+    async solve(){
+      this.snackbar = true;
+      this.cantReports = 0;
+      this.colorReport = 'success';
+      const solve = await this.$axios.put(`${process.env.NUXT_ENV_BACKEND}/sala/solve-sala/${this.classRoomId}`);
+      console.log(solve);
     }
   },
-  beforeMount() {
-    this.getRoom();
+  async beforeMount() {
+    await this.getRoom();
+    await this.getLogs();
   }
 };
 </script>
