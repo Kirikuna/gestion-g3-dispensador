@@ -242,10 +242,15 @@ const salaServices = {
                 const logsCol = await salaRef.collection('logs').get();
 
                 for (const logDoc of logsCol.docs) {
+                    const ts = logDoc.data().Timestamp.toDate();
+                    const date = ts.toLocaleDateString();
+                    const time = ts.toLocaleTimeString();
+
                     const log = {
                         id: logDoc.id,
                         Report: logDoc.data().Report,
-                        Timestamp: logDoc.data().Timestamp,
+                        Date: date,
+                        Time: time,
                     };
                     logs.push(log);
                 }
