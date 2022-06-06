@@ -18,7 +18,7 @@
 
     <v-row v-for='(option, index) in options' :key='index'>
       <v-col cols='12'>
-        <v-card class='mx-auto option-card' :color='option.color' max-width='95%' @click.native='selectedProblem(option.problem)'>
+        <v-card class='mx-auto option-card v-card--hover ' :color='option.color' max-width='95%' @click.native='selectedProblem(option.problem)'>
           <v-card-title class='justify-center mb-3'>
             <v-icon large color="white darken-2"> {{ option.icon }} </v-icon> {{option.problem}}
           </v-card-title>
@@ -82,7 +82,7 @@ export default {
 </script>
 
 <style scoped>
-  .option-card {
+  .option-card{
     cursor: pointer;
   }
 </style>
