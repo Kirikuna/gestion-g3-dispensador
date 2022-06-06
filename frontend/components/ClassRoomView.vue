@@ -41,6 +41,10 @@
           :items="logs"
           :items-per-page="10"
           class="pointer elevation-1"
+          :loading='loadingDT'
+          :sort-by="['Date', 'Time']"
+          :sort-desc="[true, true]"
+          multi-sort
         ></v-data-table>
 
     <v-dialog v-model='dialog' min-width='400px' max-width='400px'>
@@ -103,6 +107,7 @@ export default {
           { text: 'Hora de reporte', value: 'Time' , align: 'center'},
         ],
       logs: [],
+      loadingDT: true,
     }
   },
   methods: {
@@ -119,8 +124,10 @@ export default {
       this.classRoomName = this.classRoom.Name;
     },
     async getLogs() {
+      this.loadingDT = true;
       const log = await this.$axios.get(`${process.env.NUXT_ENV_BACKEND}/sala/get-logs/${this.classRoomId}`);
       this.logs = log.data.data;
+      this.loadingDT = false;
     },
     async solve() {
       this.snackbar = true;
