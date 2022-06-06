@@ -5,6 +5,7 @@ const salaRouter = express.Router();
 
 salaRouter.post('/add-sala', salaController.addSala);
 salaRouter.get('/get-sala/:id', salaController.getSala);
+salaRouter.get('/sala-exists/:id', salaController.salaExists);
 salaRouter.get('/get-all-salas', salaController.getAllSalas);
 salaRouter.get('/get-edificio-salas/:eid', salaController.getSalasOfEdificio);
 salaRouter.put('/update-sala/:id', salaController.updateSala);

@@ -95,6 +95,52 @@ const salaServices = {
             };
         }
     },
+    async salaExists(id, edificioName) {
+        try {
+            const edificioQuery = db
+                .collection('edificios')
+                .where('Name', '==', edificioName);
+            const snapshot = await edificioQuery.get();
+
+            if (!snapshot.empty) {
+                const edificioDoc = snapshot.docs[0];
+                const edifSalas = edificioDoc.data().Rooms;
+
+                const salaRef = db.collection('salas').doc(id);
+                const salaDoc = await salaRef.get();
+
+                if (salaDoc.exists && edifSalas.includes(id)) {
+                    return {
+                        status: 'success',
+                        code: 200,
+                        message: 'Sala exists',
+                        data: { exists: true, eid: edificioDoc.id, sid: id },
+                    };
+                } else {
+                    return {
+                        status: 'failed',
+                        code: 404,
+                        message: 'Sala does not exists',
+                        data: { exists: false },
+                    };
+                }
+            } else {
+                return {
+                    status: 'failed',
+                    code: 404,
+                    message: 'Edificio does not exists',
+                    data: { exists: false },
+                };
+            }
+        } catch (error) {
+            return {
+                status: 'failed',
+                code: 500,
+                message: error.trace,
+                data: {},
+            };
+        }
+    },
     async getAllSalas() {
         try {
             const salas = [];
