@@ -1,8 +1,14 @@
 <template>
   <div class='mb-10'>
-    <v-row justify='space-between'>
+    <v-row
+      justify='space-between'
+
+    >
       <v-col>
-        <v-row justify='start'>
+        <v-row
+          justify='start'
+          v-if='$store.getters["user/getUserRole"]==="Admin"'
+        >
           <v-col md='4'>
             <v-btn
               class='toggle-button'
@@ -39,7 +45,13 @@
       </v-col>
     </v-row>
     <v-row>
-      <v-col cols='12' v-for='building in buildings' :key='building.Name' md='4' sm='6'>
+      <v-col
+        cols='12'
+        v-for='building in buildings'
+        :key='building.Name'
+        md='4'
+        sm='6'
+      >
         <building-card :building='building' />
       </v-col>
     </v-row>

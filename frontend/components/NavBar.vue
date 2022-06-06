@@ -12,22 +12,22 @@
       <v-btn-toggle group borderless>
         <v-btn color='#65AFFF'
                depressed
-               v-if='selectedUser === "Admin" || selectedUser === "Reponedor"'
+               v-if='$store.getters["user/getUserRole"] === "Admin" || $store.getters["user/getUserRole"] === "Reponedor"'
                 to='/indevelopment' nuxt>
           Todos los edificios
         </v-btn>
         <v-spacer
-          v-if='selectedUser === "Admin" || selectedUser === "Reponedor"'></v-spacer>
+          v-if='$store.getters["user/getUserRole"] === "Admin" || $store.getters["user/getUserRole"] === "Reponedor"'></v-spacer>
         <v-btn color='#65AFFF'
                depressed
-               v-if='selectedUser === "Reponedor"'>
+               v-if='$store.getters["user/getUserRole"] === "Reponedor"'>
           Reportes Activos
         </v-btn>
         <v-spacer
-          v-if='selectedUser === "Reponedor"'></v-spacer>
+          v-if='$store.getters["user/getUserRole"] === "Reponedor"'></v-spacer>
         <v-btn color='#65AFFF'
                depressed
-               v-if='selectedUser === "Admin"'
+               v-if='$store.getters["user/getUserRole"] === "Admin"'
                to='/indevelopment' nuxt>
           Personal
         </v-btn>
@@ -35,18 +35,19 @@
           v-if='selectedUser === "Admin"'></v-spacer>
         <v-btn color='#65AFFF'
                depressed
-               v-if='selectedUser === "Admin"'
+               v-if='$store.getters["user/getUserRole"] === "Admin"'
                to='/' nuxt>
           Gestionar edificios
         </v-btn>
         <v-spacer
-          v-if='selectedUser === "Admin"'></v-spacer>
+          v-if='$store.getters["user/getUserRole"] === "Admin"'></v-spacer>
       </v-btn-toggle>
 
       <v-spacer></v-spacer>
 
       <v-select
-        v-model='selectedUser'
+        :value="$store.getters['user/getUserRole']"
+        @input='setSelected'
         :items='Users'
         label='Usuario'
         solo
@@ -65,8 +66,17 @@
 <script>
 export default {
   data: () => ({
-    selectedUser: 'Admin',
+    selectedUser: '',
     Users: ['Admin', 'Reponedor', 'Utalino'],
   }),
+
+  methods: {
+    setSelected(value){
+      this.$store.dispatch('user/setUserRole', value)
+    }
+  },
+  beforeMount() {
+    this.selectedUser = this.$store.getters['user/getUserRole'];
+  }
 };
 </script>
