@@ -49,7 +49,7 @@
             :room='room'
             @click.native='
               $store.getters["user/getUserRole"]==="Admin" ?
-              ()=> $router.push(
+              $router.push(
                 {name: "classrooms", query: { id: room.id, bName: building.Name, bColor: building.Color}}
               )
               : ()=>{}
