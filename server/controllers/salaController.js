@@ -23,6 +23,18 @@ const salaController = {
                 res.status(500).json(err);
             });
     },
+    async salaExists(req, res) {
+        const { id } = req.params;
+        const { edificioName } = req.body;
+        salaServices
+            .salaExists(id, edificioName)
+            .then((sala) => {
+                res.status(sala.code).json(sala);
+            })
+            .catch((err) => {
+                res.status(500).json(err);
+            });
+    },
     async getAllSalas(req, res) {
         salaServices
             .getAllSalas()
@@ -82,6 +94,18 @@ const salaController = {
         const { id } = req.params;
         salaServices
             .solveSala(id)
+            .then((sala) => {
+                res.status(sala.code).json(sala);
+            })
+            .catch((err) => {
+                res.status(500).json(err);
+            });
+    },
+    async reportSala(req, res) {
+        const { id } = req.params;
+        const { report } = req.body;
+        salaServices
+            .reportSala(id, report)
             .then((sala) => {
                 res.status(sala.code).json(sala);
             })

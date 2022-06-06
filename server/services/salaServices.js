@@ -95,6 +95,52 @@ const salaServices = {
             };
         }
     },
+    async salaExists(id, edificioName) {
+        try {
+            const edificioQuery = db
+                .collection('edificios')
+                .where('Name', '==', edificioName);
+            const snapshot = await edificioQuery.get();
+
+            if (!snapshot.empty) {
+                const edificioDoc = snapshot.docs[0];
+                const edifSalas = edificioDoc.data().Rooms;
+
+                const salaRef = db.collection('salas').doc(id);
+                const salaDoc = await salaRef.get();
+
+                if (salaDoc.exists && edifSalas.includes(id)) {
+                    return {
+                        status: 'success',
+                        code: 200,
+                        message: 'Sala exists',
+                        data: { exists: true, eid: edificioDoc.id, sid: id },
+                    };
+                } else {
+                    return {
+                        status: 'failed',
+                        code: 404,
+                        message: 'Sala does not exists',
+                        data: { exists: false },
+                    };
+                }
+            } else {
+                return {
+                    status: 'failed',
+                    code: 404,
+                    message: 'Edificio does not exists',
+                    data: { exists: false },
+                };
+            }
+        } catch (error) {
+            return {
+                status: 'failed',
+                code: 500,
+                message: error.trace,
+                data: {},
+            };
+        }
+    },
     async getAllSalas() {
         try {
             const salas = [];
@@ -242,10 +288,15 @@ const salaServices = {
                 const logsCol = await salaRef.collection('logs').get();
 
                 for (const logDoc of logsCol.docs) {
+                    const ts = logDoc.data().Timestamp.toDate();
+                    const date = ts.toLocaleDateString();
+                    const time = ts.toLocaleTimeString();
+
                     const log = {
                         id: logDoc.id,
                         Report: logDoc.data().Report,
-                        Timestamp: logDoc.data().Timestamp,
+                        Date: date,
+                        Time: time,
                     };
                     logs.push(log);
                 }
@@ -282,6 +333,20 @@ const salaServices = {
                     State: 0,
                     NumberOfReports: 0,
                 });
+
+                const timestamp = firebase.firestore.Timestamp.now();
+
+                await salaRef.collection('logs').add({
+                    Report: 'Solucionado',
+                    Timestamp: timestamp,
+                });
+
+                const ts = timestamp.toDate();
+                const date = ts.toLocaleDateString();
+                const time = ts.toLocaleTimeString();
+
+                const log = { Report: 'Solucionado', Date: date, Time: time };
+
                 return {
                     status: 'success',
                     code: 200,
@@ -290,6 +355,62 @@ const salaServices = {
                         Name: salaDoc.data().name,
                         NumberOfReports: 0,
                         State: 0,
+                        Log: log,
+                    },
+                };
+            } else {
+                return {
+                    status: 'failed',
+                    code: 404,
+                    message: 'No Sala data found',
+                    data: {},
+                };
+            }
+        } catch (error) {
+            return {
+                status: 'failed',
+                code: 500,
+                message: error.trace,
+                data: {},
+            };
+        }
+    },
+    async reportSala(id, report) {
+        try {
+            const salaRef = db.collection('salas').doc(id);
+            const salaDoc = await salaRef.get();
+            if (salaDoc.exists) {
+                let newState = 1;
+                // 9 should be a global parameter or env variable
+                if (salaDoc.data().NumberOfReports >= 9) newState = 2;
+
+                await salaRef.update({
+                    State: newState,
+                    NumberOfReports: salaDoc.data().NumberOfReports + 1,
+                });
+
+                const timestamp = firebase.firestore.Timestamp.now();
+
+                await salaRef.collection('logs').add({
+                    Report: report,
+                    Timestamp: timestamp,
+                });
+
+                const ts = timestamp.toDate();
+                const date = ts.toLocaleDateString();
+                const time = ts.toLocaleTimeString();
+
+                const log = { Report: report, Date: date, Time: time };
+
+                return {
+                    status: 'success',
+                    code: 200,
+                    message: 'Sala reported successfully',
+                    data: {
+                        Name: salaDoc.data().name,
+                        NumberOfReports: salaDoc.data().NumberOfReports + 1,
+                        State: newState,
+                        Log: log,
                     },
                 };
             } else {
