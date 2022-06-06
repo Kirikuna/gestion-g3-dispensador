@@ -97,8 +97,6 @@ const salaServices = {
     },
     async salaExists(id, edificioName) {
         try {
-            console.log(edificioName);
-            console.log(id);
             const edificioQuery = db
                 .collection('edificios')
                 .where('Name', '==', edificioName);
