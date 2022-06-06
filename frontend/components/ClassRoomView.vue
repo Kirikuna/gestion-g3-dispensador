@@ -41,6 +41,10 @@
           :items="logs"
           :items-per-page="10"
           class="pointer elevation-1"
+          :loading='loadingDT'
+          :sort-by="['Date', 'Time']"
+          :sort-desc="[true, true]"
+          multi-sort
         ></v-data-table>
 
     <v-dialog v-model='dialog' min-width='400px' max-width='400px'>
@@ -90,8 +94,8 @@ export default {
       classRoom: null,
       snackbar: false,
       timeout: 2000,
-      colorReport: '#ffba52',
-      cantReports: 1,
+      colorReport: 'success',
+      cantReports: 0,
       text: 'Reporte solucionado',
       headers: [
           {
@@ -103,6 +107,7 @@ export default {
           { text: 'Hora de reporte', value: 'Time' , align: 'center'},
         ],
       logs: [],
+      loadingDT: true,
     }
   },
   methods: {
@@ -114,20 +119,23 @@ export default {
     async getRoom() {
       this.classRoom = await this.$axios.get(`${process.env.NUXT_ENV_BACKEND}/sala/get-sala/${this.classRoomId}`);
       this.classRoom = this.classRoom.data.data;
+      this.cantReports = this.classRoom.NumberOfReports;
+      this.colorReport = this.classRoom.State === 0 ? 'success' : this.classRoom.State === 1 ? 'warning' : 'danger';
       this.classRoomName = this.classRoom.Name;
     },
-    async getLogs(){
+    async getLogs() {
+      this.loadingDT = true;
       const log = await this.$axios.get(`${process.env.NUXT_ENV_BACKEND}/sala/get-logs/${this.classRoomId}`);
       this.logs = log.data.data;
-      console.log(log.data.data);
+      this.loadingDT = false;
     },
-    async solve(){
+    async solve() {
       this.snackbar = true;
       this.cantReports = 0;
       this.colorReport = 'success';
       const solve = await this.$axios.put(`${process.env.NUXT_ENV_BACKEND}/sala/solve-sala/${this.classRoomId}`);
-      console.log(solve);
-    }
+      this.logs.unshift(solve.data.data.Log);
+    },
   },
   async beforeMount() {
     await this.getRoom();
