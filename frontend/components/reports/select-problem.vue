@@ -29,6 +29,22 @@
       </v-col>
     </v-row>
 
+    <v-row >
+      <v-card-text class='ma-auto text-center'>
+        ¿Eres parte del personal?
+        <br/>
+        Ingresa para solucionar
+        <br/>
+        <br/>
+        <v-btn small color="success">
+          Ingresar
+        </v-btn>
+      </v-card-text>
+    </v-row>
+    <v-row>
+      
+    </v-row>
+
   </v-card>
 </template>
 

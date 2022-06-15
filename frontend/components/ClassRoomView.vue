@@ -43,7 +43,7 @@
           class="pointer elevation-1"
           :loading='loadingDT'
           :sort-by="['Date', 'Time']"
-          :sort-desc="[true, true]"
+          :sort-desc="[false, true]"
           multi-sort
         ></v-data-table>
 
