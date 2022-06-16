@@ -1,4 +1,4 @@
-import colors from 'vuetify/es5/util/colors'
+import colors from 'vuetify/es5/util/colors';
 
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
@@ -35,7 +35,36 @@ export default {
     '@nuxtjs/axios',
     // https://go.nuxtjs.dev/pwa
     '@nuxtjs/pwa',
+    '@nuxtjs/auth-next',
+    'cookie-universal-nuxt',
   ],
+
+  auth: {
+    strategies: {
+      local: {
+        token: { // For the token, only using cookies, not store
+          required: false,
+          type: false,
+        },
+        user: { // Data contains user info, but user is being set manually, next to register or login
+          property: 'data',
+        },
+        endpoints: {
+          login: { url: '/auth/signin', method: 'post', propertyName: 'token' }, // Endpoint that nuxt/auth uses for login
+          logout: false, // not using endpoints for logout, logout only deletes the token cookie
+          user: false, // not using endpoints for fetch user info
+        },
+      },
+    },
+    redirect: {
+      login: '/auth/signIn',
+      logout: '/',
+      callback: '/login',
+      home: '/user/mapsVista',
+    },
+
+  },
+
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
@@ -56,8 +85,8 @@ export default {
     theme: {
       dark: false,
       themes: {
-        dark: {
-          primary: colors.blue.darken2,
+        light: {
+          primary: '65AFFF',
           accent: colors.grey.darken3,
           secondary: colors.amber.darken3,
           info: colors.teal.lighten1,
@@ -73,4 +102,4 @@ export default {
   build: {},
 
   target: 'server',
-}
+};
