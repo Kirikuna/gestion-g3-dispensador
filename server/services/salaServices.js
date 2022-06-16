@@ -283,23 +283,21 @@ const salaServices = {
             const salaRef = db.collection('salas').doc(id);
             const salaDoc = await salaRef.get();
             if (salaDoc.exists) {
-                const logs = [];
-
                 const logsCol = await salaRef.collection('logs').get();
-
-                for (const logDoc of logsCol.docs) {
-                    const ts = logDoc.data().Timestamp.toDate();
-                    const date = ts.toLocaleDateString();
-                    const time = ts.toLocaleTimeString();
-
-                    const log = {
-                        id: logDoc.id,
-                        Report: logDoc.data().Report,
-                        Date: date,
-                        Time: time,
-                    };
-                    logs.push(log);
-                }
+                const logs = logsCol.docs
+                    .map(logDoc => {
+                        const ts = logDoc.data().Timestamp.toDate();
+                        const date = ts.toLocaleDateString();
+                        const time = ts.toLocaleTimeString();
+                        return {
+                            id: logDoc.id,
+                            Report: logDoc.data().Report,
+                            Date: date,
+                            Time: time,
+                            ts: ts,
+                        }
+                    })
+                    .sort((a, b) => b.ts.getTime() - a.ts.getTime());
 
                 return {
                     status: 'success',
