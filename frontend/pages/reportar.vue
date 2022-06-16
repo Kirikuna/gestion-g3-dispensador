@@ -7,7 +7,7 @@
   <div
     v-else-if='otherProblem'
   >
-      <other-problem :nameRoom='classroom' :nameBuilding='$route.query.bName' :colorBuilding='$route.query.bColor' />
+      <other-problem :nameRoom='classroom' :nameBuilding='$route.query.bName' :colorBuilding='$route.query.bColor' @otherProblem='problem'/>
   </div>
   <div
     v-else
@@ -45,7 +45,8 @@ export default {
     },
     async problem(data) {
       if (data !== undefined) {
-
+        await this.$axios.put(`${process.env.NUXT_ENV_BACKEND}/sala/report-sala/${this.$route.query.id}`, {report: data});
+        this.$router.push({name: "index"});
       }
     },
   },

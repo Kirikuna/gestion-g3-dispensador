@@ -27,7 +27,7 @@
           </v-card-subtitle>
           <v-card max-width='80%' class='mx-auto'>
             <v-text-field 
-                v-model="title"
+                v-model="problem"
                 single-line
                 solo
                 label="Problema"
@@ -35,7 +35,7 @@
                 maxlength="15"
             />
           </v-card>
-          <v-btn class="mt-3 mb-3" color="info">
+          <v-btn class="mt-3 mb-3" color="info" @click.native='getProblem()' :disable='problem.length === 0'>
             Reportar
           </v-btn>
         </v-card>
@@ -80,12 +80,12 @@ export default {
   },
   data(){
     return {
-        title: '',
+        problem: '',
     }
   },
   methods:{
-    selectedProblem(problem) {
-      this.$emit('selectedProblem', problem);
+    getProblem() {
+      this.$emit('otherProblem', problem);
     },
   },
 };
