@@ -23,7 +23,7 @@
       <v-btn
         x-small
         @click.stop='dialog=true'
-        v-if='$store.getters["user/getUserRole"]==="Admin"'
+        v-if='$auth.user ? $auth.user.Role==="Admin":false'
       >
         editar
       </v-btn>
@@ -45,14 +45,15 @@
           :key='room.Name'
         >
           <room-card
-            :class='$store.getters["user/getUserRole"]==="Admin" ? "room-card" : ""'
+            :class='$auth.user ? $auth.user.Role==="Admin" || $auth.user.Role==="Reponedor"  ? "room-card" : "":""'
             :room='room'
             @click.native='
-              $store.getters["user/getUserRole"]==="Admin" ?
+            $auth.user ?
+              $auth.user.Role==="Admin" || $auth.user.Role==="Reponedor" ?
               $router.push(
                 {name: "classrooms", query: { id: room.id, bName: building.Name, bColor: building.Color}}
               )
-              : ()=>{}
+              : ()=>{}:()=>{}
             '
           />
         </v-col>

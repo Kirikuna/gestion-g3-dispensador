@@ -16,9 +16,10 @@ const authServices = {
     async register(firstname, lastname, username, password, role) {
         try {
             const userRef = db.collection('users');
-            const userDoc = await userRef.doc(username).get();
-            if (userDoc.exists)
-                return { status: 'failed', code: 409, message: 'Email is used', data: {} };
+            let userDoc = await userRef.where('Username', '==', username).get();
+            userDoc = userDoc.docs[0];
+            if (userDoc)
+                return { status: 'failed', code: 409, message: 'Username is used', data: {} };
             const salt = bcrypt.genSaltSync(10);
             const passwordHashed = bcrypt.hashSync(password, salt);
 
@@ -58,7 +59,7 @@ const authServices = {
             const userRef = db.collection('users');
             let userDoc = await userRef.where('Username', '==', username).get();
             userDoc = userDoc.docs[0];
-            if (!userDoc.exists || !bcrypt.compareSync(password, userDoc.data().Password))
+            if (!userDoc || !bcrypt.compareSync(password, userDoc.data().Password))
                 return {
                     status: 'failed',
                     code: '409',
@@ -82,10 +83,11 @@ const authServices = {
 
                     },
                     token: jwt.sign({
-                        _id: userDoc.id,
-                        name: userDoc.data().Firstname,
-                        email: userDoc.data().Lastname,
-                        role: userDoc.data().Username,
+                        id: userDoc.id,
+                        Firstname: userDoc.data().Firstname,
+                        Lastname: userDoc.data().Lastname,
+                        Username: userDoc.data().Username,
+                        Role: userDoc.data().Role
                     }, 'abc123'),
                 },
             };

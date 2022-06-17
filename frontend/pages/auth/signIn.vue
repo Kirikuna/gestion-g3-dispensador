@@ -94,10 +94,10 @@ export default {
           password: this.account.password,
         },
       })
-        .then((data) => {
-          this.$auth.setUser(data.data.data.user);
-          this.$cookies.set('token', data.data.data.token);
-          this.$router.push('/')
+        .then(async (data) => {
+          await this.$auth.setUser(data.data.data.user);
+          await this.$cookies.set('token', data.data.data.token);
+          await this.$router.push('/')
         })
         .catch((error) => {
           console.log(error);
