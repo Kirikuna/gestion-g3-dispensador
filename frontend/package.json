@@ -13,9 +13,13 @@
     "create-env": "printenv > .env && cat .env"
   },
   "dependencies": {
+    "@nuxtjs/auth-next": "5.0.0-1648802546.c9880dc",
     "@nuxtjs/axios": "^5.13.6",
     "@nuxtjs/pwa": "^3.3.5",
+    "cookie-universal-nuxt": "2.2.1",
+    "cookieparser": "0.1.0",
     "core-js": "^3.19.3",
+    "jwt-decode": "3.1.2",
     "nuxt": "^2.15.8",
     "qrcode.vue": "^1.7.0",
     "vue": "^2.6.14",

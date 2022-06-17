@@ -9,54 +9,140 @@
 
       <v-spacer></v-spacer>
 
-      <v-btn-toggle group borderless>
-        <v-btn color='#65AFFF'
-               depressed
-               v-if='$store.getters["user/getUserRole"] === "Admin" || $store.getters["user/getUserRole"] === "Reponedor"'
-                to='/indevelopment' nuxt>
+      <v-btn-toggle
+        group
+        borderless
+      >
+        <v-btn
+          color='#65AFFF'
+          depressed
+          v-if='$auth.user ? $auth.user.Role === "Admin" || $auth.user.Role === "Reponedor" : false'
+          to='/indevelopment'
+          nuxt
+        >
           Todos los edificios
         </v-btn>
         <v-spacer
-          v-if='$store.getters["user/getUserRole"] === "Admin" || $store.getters["user/getUserRole"] === "Reponedor"'></v-spacer>
-        <v-btn color='#65AFFF'
-               depressed
-               v-if='$store.getters["user/getUserRole"] === "Reponedor"'>
+          v-if='$auth.user ? $auth.user.Role === "Admin" || $auth.user.Role === "Reponedor" : false'
+        ></v-spacer>
+        <v-btn
+          color='#65AFFF'
+          depressed
+          v-if='$auth.user ? $auth.user.Role === "Reponedor" : false'
+        >
           Reportes Activos
         </v-btn>
         <v-spacer
-          v-if='$store.getters["user/getUserRole"] === "Reponedor"'></v-spacer>
-        <v-btn color='#65AFFF'
-               depressed
-               v-if='$store.getters["user/getUserRole"] === "Admin"'
-               to='/indevelopment' nuxt>
+          v-if='$auth.user ? $auth.user.Role === "Reponedor": false'
+        ></v-spacer>
+        <v-btn
+          color='#65AFFF'
+          depressed
+          v-if='$auth.user ? $auth.user.Role === "Admin": false'
+          to='/indevelopment'
+          nuxt
+        >
           Personal
         </v-btn>
         <v-spacer
-          v-if='selectedUser === "Admin"'></v-spacer>
-        <v-btn color='#65AFFF'
-               depressed
-               v-if='$store.getters["user/getUserRole"] === "Admin"'
-               to='/' nuxt>
+          v-if='$auth.user ? $auth.user.Role === "Admin": false'
+        ></v-spacer>
+        <v-btn
+          color='#65AFFF'
+          depressed
+          v-if='$auth.user ? $auth.user.Role === "Admin":false'
+          to='/'
+          nuxt
+        >
           Gestionar edificios
         </v-btn>
         <v-spacer
-          v-if='$store.getters["user/getUserRole"] === "Admin"'></v-spacer>
+          v-if='$auth.user ? $auth.user.Role === "Admin" : false'
+        ></v-spacer>
       </v-btn-toggle>
 
       <v-spacer></v-spacer>
 
-      <v-select
-        :value="$store.getters['user/getUserRole']"
-        @input='setSelected'
-        :items='Users'
-        label='Usuario'
-        solo
-        flat
-        dense
-        hide-details
-        background-color='#65AFFF'
-        style='max-width: 200px; width:10%'
-      ></v-select>
+      <v-menu
+        offset-y
+        transition="scale-transition"
+      >
+        <template #activator='{ on, attrs }' >
+
+          <v-btn
+            text
+            color='white'
+            v-bind='attrs'
+            v-on='on'
+            class='pl-2 pr-2'
+            v-if='$auth.user ? true : false'
+          >
+
+            <v-avatar
+              size='30'
+              class='mr-2'
+            >
+              <img
+                src='https://cdn.vuetifyjs.com/images/john.jpg'
+                alt='John'
+              >
+            </v-avatar>
+            {{ $auth.user ? $auth.user.Username : '' }}
+          </v-btn>
+
+        </template>
+        <v-list
+          dense
+          height='100%'
+        >
+        <span
+          v-for='item in items'
+
+          :key='item.title'
+        >
+
+        <v-list-item
+
+          v-if='item.condition'
+        >
+          <router-link :to='item.to'>
+            <v-btn
+              large
+              plain
+              class='text-center white--text'
+              color='#02B5C2'
+
+            >
+                <v-icon class='mr-1'>
+                  {{ item.icon }}
+                </v-icon>
+               {{ item.title }}
+            </v-btn>
+          </router-link>
+        </v-list-item>
+
+        </span>
+          <v-spacer />
+          <v-list-item>
+            <v-btn
+              large
+              plain
+              class='text-center'
+              color='red'
+              href='/'
+              @click='logOut()'
+            >
+              <v-icon class='mr-1'>
+                mdi-logout
+              </v-icon>
+              Cerrar sesión
+            </v-btn>
+          </v-list-item>
+          <v-spacer />
+
+
+        </v-list>
+      </v-menu>
 
     </v-app-bar>
   </div>
@@ -68,15 +154,14 @@ export default {
   data: () => ({
     selectedUser: '',
     Users: ['Admin', 'Reponedor', 'Utalino'],
+    items: [],
   }),
 
   methods: {
-    setSelected(value){
-      this.$store.dispatch('user/setUserRole', value)
-    }
+    async logOut() {
+      await this.$auth.logout();
+      await this.$cookies.remove('token');
+    },
   },
-  beforeMount() {
-    this.selectedUser = this.$store.getters['user/getUserRole'];
-  }
 };
 </script>

@@ -7,7 +7,7 @@
       <v-col>
         <v-row
           justify='start'
-          v-if='$store.getters["user/getUserRole"]==="Admin"'
+          v-if='$auth.user ? $auth.user.Role==="Admin":false'
         >
           <v-col md='4'>
             <v-btn
