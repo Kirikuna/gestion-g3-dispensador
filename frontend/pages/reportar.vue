@@ -9,6 +9,7 @@
 <script>
 import SelectProblem from '~/components/reports/select-problem';
 export default {
+  auth: false,
   name: 'reportar',
   components: { SelectProblem },
   data() {

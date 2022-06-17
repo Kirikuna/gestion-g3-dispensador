@@ -22,7 +22,10 @@
                 <v-toolbar-title>Iniciar Sesión</v-toolbar-title>
               </v-toolbar>
               <v-card-text>
-                <v-form v-model='account.valid'>
+                <v-form
+                  v-model='account.valid'
+
+                >
                   <v-text-field
                     name='login'
                     label='Nombre de usuario'
@@ -37,17 +40,21 @@
                     type='password'
                     v-model='account.password'
                     :rules='account.passwordRules'
+                    @keydown.enter='login()'
                   ></v-text-field>
+
+                  <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn
+                      color='primary'
+                      :disabled='!account.valid'
+                      @click='login()'
+                    >Login
+                    </v-btn>
+                  </v-card-actions>
                 </v-form>
               </v-card-text>
-              <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn
-                  color='primary'
-                  :disabled='!account.valid'
-                >Login
-                </v-btn>
-              </v-card-actions>
+
             </v-card>
           </v-col>
         </v-row>
@@ -63,8 +70,8 @@ export default {
     return {
       account: {
         valid: false,
-        username: '',
-        password: '',
+        username: 'leunam',
+        password: '12345',
         usernameRules: [
           v => !!v || 'El nombre de usuario es requerido',
         ],
@@ -80,22 +87,27 @@ export default {
     };
   },
   methods: {
-    login() {
-      this.$auth.loginWith('local', { data: { username: this.account.username, password: this.account.password } })
+    async login() {
+      await this.$auth.loginWith('local', {
+        data: {
+          username: this.account.username,
+          password: this.account.password,
+        },
+      })
         .then((data) => {
-          console.log(data);
-          this.notification(true, 'red')
+          this.$auth.setUser(data.data.data.user);
+          this.$cookies.set('token', data.data.data.token);
+          this.$router.push('/')
         })
         .catch((error) => {
           console.log(error);
-          this.notification(true, 'red', 'Error')
         });
     },
-    notification(show, color, message){
+    notify(show, color, message) {
       this.notification.show = show;
       this.notification.color = color;
       this.notification.message = message;
-    }
+    },
   },
 };
 </script>

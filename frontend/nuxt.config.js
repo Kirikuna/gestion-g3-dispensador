@@ -47,10 +47,10 @@ export default {
           type: false,
         },
         user: { // Data contains user info, but user is being set manually, next to register or login
-          property: 'data',
+          property: 'data.data.user',
         },
         endpoints: {
-          login: { url: '/auth/signin', method: 'post', propertyName: 'token' }, // Endpoint that nuxt/auth uses for login
+          login: { url: '/auth/signin', method: 'post', /*propertyName: 'token'*/ }, // Endpoint that nuxt/auth uses for login
           logout: false, // not using endpoints for logout, logout only deletes the token cookie
           user: false, // not using endpoints for fetch user info
         },
@@ -60,16 +60,20 @@ export default {
       login: '/auth/signIn',
       logout: '/',
       callback: '/login',
-      home: '/user/mapsVista',
-    },
+      home: false,
 
+    }
+  },
+
+  router: {
+    middleware: ['auth'] // All pages (except pages that have auth: false) will require login for access
   },
 
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
     // Workaround to avoid enforcing hard-coded localhost:3000: https://github.com/nuxt-community/axios-module/issues/308
-    baseURL: '/',
+    baseURL: process.env.HOST_API || 'http://localhost:9000/',
   },
 
   // PWA module configuration: https://go.nuxtjs.dev/pwa
