@@ -3,13 +3,13 @@
     <v-card>
       <v-card-title class='justify-center'>QR de reporte:</v-card-title>
       <v-card-title class='justify-center'>
-        <qrcode-vue class-name='mx-auto' :value='qrValue' size='250'></qrcode-vue>
+        <qrcode-vue id='qr' class-name='mx-auto' :value='qrValue' size='250'></qrcode-vue>
       </v-card-title>
       <v-card-title class='justify-center'>Link:
         {{ qrValue }}
       </v-card-title>
       <v-card-actions class='justify-center'>
-        <v-btn class='toggle-button'>
+        <v-btn class='toggle-button' @click="download()">
           Descargar imagen
         </v-btn>
 
@@ -33,6 +33,15 @@ export default {
     generateQRlink() {
       console.log();
       return `${process.env.NUXT_ENV_DEPLOY_LINK}/reportar?${new URLSearchParams(this.$route.query).toString()}`;
+    },
+    download(){
+      const canvas = document.getElementById('qr').getElementsByTagName('canvas');
+      console.log(this.$route.query);
+      console.log(canvas);
+      const a = document.createElement("a");
+      a.href  = canvas[0].toDataURL('image/png');
+      a.download = 'Edificio'
+      a.click();
     },
   },
   mounted() {
