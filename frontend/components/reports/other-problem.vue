@@ -35,7 +35,7 @@
                 maxlength="15"
             />
           </v-card>
-          <v-btn class="mt-3 mb-3" color="info" @click.native='getProblem()' :disable='problem.length === 0'>
+          <v-btn class="mt-3 mb-3" color="info" @click.native='getProblem()' :disabled='problem.length === 0'>
             Reportar
           </v-btn>
         </v-card>
