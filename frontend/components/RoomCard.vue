@@ -8,7 +8,7 @@
         <v-card-title class='justify-center pa-0' style='font-size: 0.8em'>{{ room.Name }}</v-card-title>
       </v-col>
       <v-col cols='4'>
-        <v-card-text class='pa-0'>{{"3-12-1999"}}</v-card-text>
+        <v-card-text class='pa-0'>{{room.Logs.Date}} {{room.Logs.Time}}</v-card-text>
       </v-col>
       <v-col cols='4'>
         <v-card-actions class='pa-0 justify-center' >
