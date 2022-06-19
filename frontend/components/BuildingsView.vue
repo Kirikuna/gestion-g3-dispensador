@@ -32,15 +32,28 @@
       <v-col>
         <v-row justify='end'>
           <v-col md='5'>
-            <v-btn block>
-              Filtrar por edificio
-            </v-btn>
+            <v-select
+              v-model="buildingValue"
+              :items="buildingFilter"
+              :change="filterBuildings()"
+              chips
+              label="Filtrar por edificio"
+              multiple
+              solo
+            ></v-select>
           </v-col>
           <v-col md='5'>
-            <v-btn block>
-              Filtrar por estado
-            </v-btn>
-          </v-col>
+          <v-select
+            v-model="stateValue"
+            :items="stateFilter"
+            :change="filterStates()"
+            chips
+            label="Filtrar por estado"
+            multiple
+            solo
+          ></v-select>
+        </v-col>
+
         </v-row>
       </v-col>
     </v-row>
@@ -64,6 +77,10 @@ export default {
   data: () => {
     return {
       dialog: false,
+      stateFilter: ['Disponible', 'Con problemas', 'No disponible'],
+      buildingFilter: ['Edificio', 'Estado', 'fizz'],
+      stateValue: [],
+      buildingValue: [],
     };
   },
   computed: {
@@ -77,6 +94,10 @@ export default {
       this.$store.dispatch('buildings/getBuildings');
 
     },
+    filterBuildings(){
+    },
+    filterStates(){
+    }
   },
   created() {
     this.loadBuildings();
