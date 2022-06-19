@@ -10,6 +10,7 @@ steps:
     args: [ "run", "create-env" ]
     env:
       - "NUXT_ENV_BACKEND=${_NUXT_ENV_BACKEND}"
+      - "NUXT_ENV_DEPLOY_LINK=${_NUXT_ENV_DEPLOY_LINK}"
     dir: "frontend"
     id: "envvars-frontend"
     waitFor: [ "install-frontend" ]

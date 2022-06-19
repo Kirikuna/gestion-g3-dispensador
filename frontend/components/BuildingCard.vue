@@ -3,7 +3,10 @@
     class='mx-auto'
     max-width='344'
   >
-    <v-toolbar :color='building.Color' height='20px'>
+    <v-toolbar
+      :color='building.Color'
+      height='20px'
+    >
 
     </v-toolbar>
 
@@ -17,7 +20,11 @@
       </v-card-title>
 
 
-      <v-btn x-small @click.stop='dialog=true'>
+      <v-btn
+        x-small
+        @click.stop='dialog=true'
+        v-if='$store.getters["user/getUserRole"]==="Admin"'
+      >
         editar
       </v-btn>
       <BuildingDialog
@@ -32,8 +39,22 @@
 
     <v-card-text class='pa-0'>
       <v-row>
-        <v-col cols='12' v-for='room in building.Rooms' :key='room.Name'>
-          <room-card class='room-card' :room='room' @click.native='$router.push({name: "classrooms", query: { id: room.id, bName: building.Name, bColor: building.Color}})'/>
+        <v-col
+          cols='12'
+          v-for='room in building.Rooms'
+          :key='room.Name'
+        >
+          <room-card
+            :class='$store.getters["user/getUserRole"]==="Admin" ? "room-card" : ""'
+            :room='room'
+            @click.native='
+              $store.getters["user/getUserRole"]==="Admin" ?
+              $router.push(
+                {name: "classrooms", query: { id: room.id, bName: building.Name, bColor: building.Color}}
+              )
+              : ()=>{}
+            '
+          />
         </v-col>
       </v-row>
     </v-card-text>
