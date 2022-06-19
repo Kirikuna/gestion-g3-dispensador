@@ -1,5 +1,7 @@
 <template>
-  <h1>In Development</h1>
+  <div>
+    <EveryQRView/>
+  </div>
 </template>
 
 <script>

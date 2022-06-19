@@ -24,6 +24,7 @@ import QrcodeVue from 'qrcode.vue';
 export default {
   name: 'QRGeneration',
   components: { QrcodeVue },
+  props: ['QRroute', 'classRoomName'],
   data: () => {
     return {
       qrValue: 'https://www.google.cl/',
@@ -32,7 +33,7 @@ export default {
   methods: {
     generateQRlink() {
       console.log();
-      return `${process.env.NUXT_ENV_DEPLOY_LINK}/reportar?${new URLSearchParams(this.$route.query).toString()}`;
+      return `${process.env.NUXT_ENV_DEPLOY_LINK}/reportar?${new URLSearchParams(this.QRroute).toString()}`;
     },
     download(){
       const canvas = document.getElementById('qr').getElementsByTagName('canvas');
@@ -40,13 +41,11 @@ export default {
       console.log(canvas);
       const a = document.createElement("a");
       a.href  = canvas[0].toDataURL('image/png');
-      a.download = 'Edificio'
+      a.download = `${this.QRroute.bName}-${this.classRoomName}`;
       a.click();
     },
   },
   mounted() {
-    console.log(this.$route.query);
-    console.log(this.$route.name);
     const qrLink = this.generateQRlink();
     this.qrValue = qrLink ? qrLink : 'No Link Available';
   },
