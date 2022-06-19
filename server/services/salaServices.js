@@ -47,6 +47,7 @@ const salaServices = {
                             Name: name,
                             State: 0,
                             NumberOfReports: 0,
+                            Logs: log,
                         },
                     };
                 } else {
