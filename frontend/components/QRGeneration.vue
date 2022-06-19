@@ -5,7 +5,7 @@
       <v-card-title class='justify-center'>
         <qrcode-vue id='qr' class-name='mx-auto' :value='qrValue' size='250'></qrcode-vue>
       </v-card-title>
-      <v-card-title class='justify-center'>Link:
+      <v-card-title v-if="showLink"  class='justify-center'>Link:
         {{ qrValue }}
       </v-card-title>
       <v-card-actions class='justify-center'>
@@ -24,7 +24,7 @@ import QrcodeVue from 'qrcode.vue';
 export default {
   name: 'QRGeneration',
   components: { QrcodeVue },
-  props: ['QRroute', 'classRoomName'],
+  props: ['QRroute', 'classRoomName', 'showLink'],
   data: () => {
     return {
       qrValue: 'https://www.google.cl/',
@@ -37,8 +37,6 @@ export default {
     },
     download(){
       const canvas = document.getElementById('qr').getElementsByTagName('canvas');
-      console.log(this.$route.query);
-      console.log(canvas);
       const a = document.createElement("a");
       a.href  = canvas[0].toDataURL('image/png');
       a.download = `${this.QRroute.bName}-${this.classRoomName}`;
