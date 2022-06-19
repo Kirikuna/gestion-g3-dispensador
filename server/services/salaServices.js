@@ -11,15 +11,22 @@ const salaServices = {
                 const match = await salasRef.where('Name', '==', name).get();
 
                 if (match.empty) {
+                    const timestamp = firebase.firestore.Timestamp.now();
+                    const ts = timestamp.toDate();
+                    const date = ts.toLocaleDateString();
+                    const time = ts.toLocaleTimeString();
+
+                    const log = { Report: 'Solucionado', Date: date, Time: time };
                     const salaAdd = await salasRef.add({
                         Name: name,
                         State: 0,
                         NumberOfReports: 0,
+                        Logs: log,
                     });
 
                     await salaAdd.collection('logs').add({
                         Report: 'Creada',
-                        Timestamp: firebase.firestore.Timestamp.now(),
+                        Timestamp: timestamp,
                     });
 
                     await edificioRef.set(
@@ -327,23 +334,24 @@ const salaServices = {
             const salaRef = db.collection('salas').doc(id);
             const salaDoc = await salaRef.get();
             if (salaDoc.exists) {
-                await salaRef.update({
-                    State: 0,
-                    NumberOfReports: 0,
-                });
-
                 const timestamp = firebase.firestore.Timestamp.now();
-
-                await salaRef.collection('logs').add({
-                    Report: 'Solucionado',
-                    Timestamp: timestamp,
-                });
-
                 const ts = timestamp.toDate();
                 const date = ts.toLocaleDateString();
                 const time = ts.toLocaleTimeString();
 
                 const log = { Report: 'Solucionado', Date: date, Time: time };
+                await salaRef.update({
+                    State: 0,
+                    NumberOfReports: 0,
+                    Logs: log,
+                });
+
+                
+
+                await salaRef.collection('logs').add({
+                    Report: 'Solucionado',
+                    Timestamp: timestamp,
+                });
 
                 return {
                     status: 'success',
@@ -382,23 +390,23 @@ const salaServices = {
                 // 9 should be a global parameter or env variable
                 if (salaDoc.data().NumberOfReports >= 9) newState = 2;
 
-                await salaRef.update({
-                    State: newState,
-                    NumberOfReports: salaDoc.data().NumberOfReports + 1,
-                });
-
                 const timestamp = firebase.firestore.Timestamp.now();
-
-                await salaRef.collection('logs').add({
-                    Report: report,
-                    Timestamp: timestamp,
-                });
-
                 const ts = timestamp.toDate();
                 const date = ts.toLocaleDateString();
                 const time = ts.toLocaleTimeString();
 
                 const log = { Report: report, Date: date, Time: time };
+
+                await salaRef.update({
+                    State: newState,
+                    NumberOfReports: salaDoc.data().NumberOfReports + 1,
+                    Logs: log,
+                });
+
+                await salaRef.collection('logs').add({
+                    Report: report,
+                    Timestamp: timestamp,
+                });
 
                 return {
                     status: 'success',
