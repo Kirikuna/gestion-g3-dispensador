@@ -1,10 +1,11 @@
-import { filterBuildings } from '~/helpers/filters';
+import { filterBuildings, filterStates } from '~/helpers/filters';
 
 export const state = () => ({
   buildings: [],
   filteredBuildings: [],
   filters: {
     buildingNames: [],
+    states: [],
   },
 });
 
@@ -35,13 +36,22 @@ export const mutations = {
   },
 
   // FILTERS
-  setFilters(state, buildingNames) {
+  setBuildingNamesFilters(state, buildingNames) {
     state.filters.buildingNames = buildingNames;
   },
 
-  filterBuildings(state, buildingNames) {
+  setStateFilters(state, states) {
+    state.filters.states = states;
+  },
+
+  filterBuildings(state) {
     const buildings = [...state.buildings];
     state.filteredBuildings = filterBuildings(state.filters.buildingNames, buildings);
+  },
+
+  filterStates(state) {
+    const buildings = [...state.filteredBuildings];
+    state.filteredBuildings = filterStates(state.filters.states, buildings);
   },
 };
 
@@ -132,8 +142,13 @@ export const actions = {
   //FILTERS
 
   async filterBuildings({ commit }, buildingNames) {
-    await commit('setFilters', buildingNames);
+    await commit('setBuildingNamesFilters', buildingNames);
     await commit('filterBuildings', buildingNames);
+  },
+
+  async filterStates({ commit }, states) {
+    await commit('setStateFilters', states);
+    await commit('filterStates', states);
   },
 };
 

@@ -35,7 +35,6 @@
             <v-select
               v-model='buildingValue'
               :items='this.buildings'
-              @input='filterBuildings()'
               chips
               label='Filtrar por edificio'
               item-text='Name'
@@ -47,12 +46,16 @@
             <v-select
               v-model='stateValue'
               :items='stateFilter'
-              :input='filterStates()'
               chips
               label='Filtrar por estado'
+              item-text='type'
+              item-value='value'
               multiple
               solo
             ></v-select>
+          </v-col>
+          <v-col md='2'>
+            <v-btn color='primary' @click='filterAll()'>Aplicar</v-btn>
           </v-col>
 
         </v-row>
@@ -79,7 +82,10 @@ export default {
   data: () => {
     return {
       dialog: false,
-      stateFilter: ['Disponible', 'Con problemas', 'No disponible'],
+      stateFilter: [{ type: 'Disponible', value: 0 }, { type: 'Con problemas', value: 1 }, {
+        type: 'No disponible',
+        value: 2,
+      }],
       buildingFilter: [],
       stateValue: [],
       buildingValue: [],
@@ -96,24 +102,43 @@ export default {
   },
   methods: {
     async loadBuildings() {
-     await this.$store.dispatch('buildings/getBuildings');
+      await this.$store.dispatch('buildings/getBuildings');
 
     },
     filterBuildings() {
       console.log('filtering');
       console.log(this.buildingValue);
-      if(this.buildingValue.length === 0)
+      if (this.buildingValue.length === 0)
         this.$store.dispatch('buildings/filterBuildings', 'all');
       else
         this.$store.dispatch('buildings/filterBuildings', this.buildingValue);
 
     },
     filterStates() {
+      console.log('filtering states');
+      console.log(this.stateValue);
+      if (this.stateValue.length === 0)
+        this.$store.dispatch('buildings/filterStates', 'all');
+      else
+        this.$store.dispatch('buildings/filterStates', this.stateValue);
     },
+
+    filterAll(){
+      this.loadBuildings();
+      if (this.buildingValue.length === 0)
+        this.$store.dispatch('buildings/filterBuildings', 'all');
+      else
+        this.$store.dispatch('buildings/filterBuildings', this.buildingValue);
+
+      if (this.stateValue.length === 0)
+        this.$store.dispatch('buildings/filterStates', 'all');
+      else
+        this.$store.dispatch('buildings/filterStates', this.stateValue);
+    }
   },
   async beforeMount() {
     await this.loadBuildings();
-    await this.filterBuildings();
+    await this.filterAll();
     this.buildingFilter = this.buildings;
     console.log(this.buildings);
   },
