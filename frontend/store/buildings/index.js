@@ -1,8 +1,15 @@
+import { filterBuildings } from '~/helpers/filters';
+
 export const state = () => ({
-  buildings: null,
+  buildings: [],
+  filteredBuildings: [],
+  filters: {
+    buildingNames: [],
+  },
 });
 
 export const mutations = {
+  // CRUD
   setBuildings(state, payload) {
     state.buildings = payload;
   },
@@ -26,9 +33,20 @@ export const mutations = {
     );
     building.Rooms.push(payload.room);
   },
+
+  // FILTERS
+  setFilters(state, buildingNames) {
+    state.filters.buildingNames = buildingNames;
+  },
+
+  filterBuildings(state, buildingNames) {
+    const buildings = [...state.buildings];
+    state.filteredBuildings = filterBuildings(state.filters.buildingNames, buildings);
+  },
 };
 
 export const actions = {
+  // CRUD
   async getBuildings(context) {
     const buildings = await this.$axios.get(
       `${process.env.NUXT_ENV_BACKEND}/edificio/get-all-edificios`,
@@ -47,6 +65,7 @@ export const actions = {
       .catch((error) => {
         console.log(error);
       });
+    context.commit('filterBuildings', context.state.filters.buildingNames);
   },
 
   async editBuilding(context, payload) {
@@ -65,6 +84,7 @@ export const actions = {
       .catch((error) => {
         console.log(error);
       });
+    context.commit('filterBuildings', context.state.filters.buildingNames);
   },
   async deleteBuilding(context, payload) {
     await this.$axios
@@ -77,6 +97,7 @@ export const actions = {
       .catch((error) => {
         console.log(error);
       });
+    context.commit('filterBuildings', context.state.filters.buildingNames);
   },
   async addSala(context, payload) {
     await this.$axios
@@ -107,6 +128,13 @@ export const actions = {
         console.log(error);
       });
   },
+
+  //FILTERS
+
+  async filterBuildings({ commit }, buildingNames) {
+    await commit('setFilters', buildingNames);
+    await commit('filterBuildings', buildingNames);
+  },
 };
 
 export const getters = {
@@ -117,5 +145,8 @@ export const getters = {
     const building = state.buildings.find(
       (building) => building.id === payload.eid,
     );
+  },
+  getFilteredBuildings(state) {
+    return state.filteredBuildings;
   },
 };

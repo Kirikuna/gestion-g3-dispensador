@@ -33,26 +33,27 @@
         <v-row justify='end'>
           <v-col md='5'>
             <v-select
-              v-model="buildingValue"
-              :items="buildingFilter"
-              :change="filterBuildings()"
+              v-model='buildingValue'
+              :items='this.buildings'
+              @input='filterBuildings()'
               chips
-              label="Filtrar por edificio"
+              label='Filtrar por edificio'
+              item-text='Name'
               multiple
               solo
             ></v-select>
           </v-col>
           <v-col md='5'>
-          <v-select
-            v-model="stateValue"
-            :items="stateFilter"
-            :change="filterStates()"
-            chips
-            label="Filtrar por estado"
-            multiple
-            solo
-          ></v-select>
-        </v-col>
+            <v-select
+              v-model='stateValue'
+              :items='stateFilter'
+              :input='filterStates()'
+              chips
+              label='Filtrar por estado'
+              multiple
+              solo
+            ></v-select>
+          </v-col>
 
         </v-row>
       </v-col>
@@ -60,7 +61,7 @@
     <v-row>
       <v-col
         cols='12'
-        v-for='building in buildings'
+        v-for='building in filteredBuildings'
         :key='building.Name'
         md='4'
         sm='6'
@@ -71,6 +72,7 @@
   </div>
 </template>
 <script>
+
 export default {
   name: 'IndexPage',
   layout: 'default',
@@ -78,7 +80,7 @@ export default {
     return {
       dialog: false,
       stateFilter: ['Disponible', 'Con problemas', 'No disponible'],
-      buildingFilter: ['Edificio', 'Estado', 'fizz'],
+      buildingFilter: [],
       stateValue: [],
       buildingValue: [],
     };
@@ -87,20 +89,33 @@ export default {
     buildings() {
       return this.$store.getters['buildings/getBuildings'];
     },
+    filteredBuildings() {
+      return this.$store.getters['buildings/getFilteredBuildings'];
+    },
 
   },
   methods: {
-    loadBuildings() {
-      this.$store.dispatch('buildings/getBuildings');
+    async loadBuildings() {
+     await this.$store.dispatch('buildings/getBuildings');
 
     },
-    filterBuildings(){
+    filterBuildings() {
+      console.log('filtering');
+      console.log(this.buildingValue);
+      if(this.buildingValue.length === 0)
+        this.$store.dispatch('buildings/filterBuildings', 'all');
+      else
+        this.$store.dispatch('buildings/filterBuildings', this.buildingValue);
+
     },
-    filterStates(){
-    }
+    filterStates() {
+    },
   },
-  created() {
-    this.loadBuildings();
+  async beforeMount() {
+    await this.loadBuildings();
+    await this.filterBuildings();
+    this.buildingFilter = this.buildings;
+    console.log(this.buildings);
   },
 };
 </script>
