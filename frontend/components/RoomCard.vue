@@ -8,7 +8,7 @@
         <v-card-title class='justify-center pa-0' style='font-size: 0.8em'>{{ room.Name }}</v-card-title>
       </v-col>
       <v-col cols='4'>
-        <v-card-text class='pa-0'>{{room.Logs.Date}} {{room.Logs.Time}}</v-card-text>
+        <v-card-text class='pa-0'>{{date}} {{time}}</v-card-text>
       </v-col>
       <v-col cols='4'>
         <v-card-actions class='pa-0 justify-center' >
@@ -24,6 +24,14 @@
 <script>
 export default {
   props: ['room'],
+  computed: {
+    date() {
+      return this.room.Logs ? this.room.Logs.Date : 'Falta fecha men';
+    },
+    time() {
+      return this.room.Logs ? this.room.Logs.Time : 'Falta Hora men';
+    },
+  },
   methods:{
     getColor(State){
       if(State===0) return "green";

@@ -5,7 +5,7 @@
   >
     <v-toolbar :color='room.edificiocolor' height='20px'/>
 
-    <v-toolbar height='60%'>
+    <v-toolbar height="100%">
       <v-row>
         <v-col>
           <v-card-title
