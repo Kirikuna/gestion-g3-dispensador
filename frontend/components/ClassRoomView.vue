@@ -37,20 +37,17 @@
       </v-col>
     </v-row>
         <v-data-table
-          :headers="headers"
+          :headers="header"
           :items="logs"
           :items-per-page="10"
           class="pointer elevation-1"
           :loading='loadingDT'
-          :sort-by="['Date', 'Time']"
-          :sort-desc="[true, true]"
-          multi-sort
         ></v-data-table>
 
     <v-dialog v-model='dialog' min-width='400px' max-width='400px'>
       <edit-class-room-card :class-room-name='classRoomName' :classRoomId='classRoomId' @dialogAction='dialogAction'/>
     </v-dialog>
-    <QRGeneration/>
+    <QRGeneration :QRroute='$route.query' :classRoomName='classRoomName' :showLink='true'/>
     <v-snackbar
       v-model="snackbar"
       :timeout="timeout"
@@ -97,14 +94,15 @@ export default {
       colorReport: 'success',
       cantReports: 0,
       text: 'Reporte solucionado',
-      headers: [
+      header: [
           {
             text: 'Mensaje',
             align: 'center',
-            value: 'Report'
+            value: 'Report', 
+            sorteable: false
           },
-          { text: 'Fecha de reporte', value: 'Date', align: 'center'},
-          { text: 'Hora de reporte', value: 'Time' , align: 'center'},
+          { text: 'Fecha de reporte', value: 'Date', align: 'center', sorteable: false},
+          { text: 'Hora de reporte', value: 'Time' , align: 'center', sorteable: false},
         ],
       logs: [],
       loadingDT: true,

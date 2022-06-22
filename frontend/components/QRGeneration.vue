@@ -3,13 +3,13 @@
     <v-card>
       <v-card-title class='justify-center'>QR de reporte:</v-card-title>
       <v-card-title class='justify-center'>
-        <qrcode-vue class-name='mx-auto' :value='qrValue' size='250'></qrcode-vue>
+        <qrcode-vue id='qr' class-name='mx-auto' :value='qrValue' size='250'></qrcode-vue>
       </v-card-title>
-      <v-card-title class='justify-center'>Link:
+      <v-card-title v-if="showLink"  class='justify-center'>Link:
         {{ qrValue }}
       </v-card-title>
       <v-card-actions class='justify-center'>
-        <v-btn class='toggle-button'>
+        <v-btn class='toggle-button' @click="download()">
           Descargar imagen
         </v-btn>
 
@@ -24,6 +24,7 @@ import QrcodeVue from 'qrcode.vue';
 export default {
   name: 'QRGeneration',
   components: { QrcodeVue },
+  props: ['QRroute', 'classRoomName', 'showLink'],
   data: () => {
     return {
       qrValue: 'https://www.google.cl/',
@@ -32,12 +33,17 @@ export default {
   methods: {
     generateQRlink() {
       console.log();
-      return `${process.env.NUXT_ENV_DEPLOY_LINK}/reportar?${new URLSearchParams(this.$route.query).toString()}`;
+      return `${process.env.NUXT_ENV_DEPLOY_LINK}/reportar?${new URLSearchParams(this.QRroute).toString()}`;
+    },
+    download(){
+      const canvas = document.getElementById('qr').getElementsByTagName('canvas');
+      const a = document.createElement("a");
+      a.href  = canvas[0].toDataURL('image/png');
+      a.download = `${this.QRroute.bName}-${this.classRoomName}`;
+      a.click();
     },
   },
   mounted() {
-    console.log(this.$route.query);
-    console.log(this.$route.name);
     const qrLink = this.generateQRlink();
     this.qrValue = qrLink ? qrLink : 'No Link Available';
   },
