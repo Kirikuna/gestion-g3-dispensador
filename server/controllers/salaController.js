@@ -24,10 +24,9 @@ const salaController = {
             });
     },
     async salaExists(req, res) {
-        const { id } = req.params;
-        const { edificioName } = req.body;
+        const { id, edificio } = req.params;
         salaServices
-            .salaExists(id, edificioName)
+            .salaExists(id, edificio)
             .then((sala) => {
                 res.status(sala.code).json(sala);
             })
