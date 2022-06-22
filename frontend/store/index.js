@@ -7,7 +7,6 @@ import CookieParser from 'cookieparser';
 export const actions = {
   // Everytime when browser is reloaded, this function will be called natively
   nuxtServerInit({commit}, {req}) {
-    console.log(req.headers.cookie);
     if (process.server && process.static) return;
     if (!req.headers.cookie) return;
 
@@ -15,7 +14,6 @@ export const actions = {
     const accessTokenCookie = parsed.token;
     if (!accessTokenCookie) return;
     const decoded = jwtDecode(accessTokenCookie);
-    console.log(decoded);
     this.$auth.setUser(decoded);
 
   },
