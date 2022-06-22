@@ -32,22 +32,39 @@
       <v-col>
         <v-row justify='end'>
           <v-col md='5'>
-            <v-btn block>
-              Filtrar por edificio
-            </v-btn>
+            <v-select
+              v-model='buildingValue'
+              :items='this.buildings'
+              chips
+              label='Filtrar por edificio'
+              item-text='Name'
+              multiple
+              solo
+            ></v-select>
           </v-col>
           <v-col md='5'>
-            <v-btn block>
-              Filtrar por estado
-            </v-btn>
+            <v-select
+              v-model='stateValue'
+              :items='stateFilter'
+              chips
+              label='Filtrar por estado'
+              item-text='type'
+              item-value='value'
+              multiple
+              solo
+            ></v-select>
           </v-col>
+          <v-col md='2'>
+            <v-btn color='primary' @click='filterAll()'>Aplicar</v-btn>
+          </v-col>
+
         </v-row>
       </v-col>
     </v-row>
     <v-row>
       <v-col
         cols='12'
-        v-for='building in buildings'
+        v-for='building in filteredBuildings'
         :key='building.Name'
         md='4'
         sm='6'
@@ -58,28 +75,72 @@
   </div>
 </template>
 <script>
+
 export default {
   name: 'IndexPage',
   layout: 'default',
   data: () => {
     return {
       dialog: false,
+      stateFilter: [{ type: 'Disponible', value: 0 }, { type: 'Con problemas', value: 1 }, {
+        type: 'No disponible',
+        value: 2,
+      }],
+      buildingFilter: [],
+      stateValue: [],
+      buildingValue: [],
     };
   },
   computed: {
     buildings() {
       return this.$store.getters['buildings/getBuildings'];
     },
+    filteredBuildings() {
+      return this.$store.getters['buildings/getFilteredBuildings'];
+    },
 
   },
   methods: {
-    loadBuildings() {
-      this.$store.dispatch('buildings/getBuildings');
+    async loadBuildings() {
+      await this.$store.dispatch('buildings/getBuildings');
 
     },
+    filterBuildings() {
+      console.log('filtering');
+      console.log(this.buildingValue);
+      if (this.buildingValue.length === 0)
+        this.$store.dispatch('buildings/filterBuildings', 'all');
+      else
+        this.$store.dispatch('buildings/filterBuildings', this.buildingValue);
+
+    },
+    filterStates() {
+      console.log('filtering states');
+      console.log(this.stateValue);
+      if (this.stateValue.length === 0)
+        this.$store.dispatch('buildings/filterStates', 'all');
+      else
+        this.$store.dispatch('buildings/filterStates', this.stateValue);
+    },
+
+    filterAll(){
+      this.loadBuildings();
+      if (this.buildingValue.length === 0)
+        this.$store.dispatch('buildings/filterBuildings', 'all');
+      else
+        this.$store.dispatch('buildings/filterBuildings', this.buildingValue);
+
+      if (this.stateValue.length === 0)
+        this.$store.dispatch('buildings/filterStates', 'all');
+      else
+        this.$store.dispatch('buildings/filterStates', this.stateValue);
+    }
   },
-  created() {
-    this.loadBuildings();
+  async beforeMount() {
+    await this.loadBuildings();
+    await this.filterAll();
+    this.buildingFilter = this.buildings;
+    console.log(this.buildings);
   },
 };
 </script>

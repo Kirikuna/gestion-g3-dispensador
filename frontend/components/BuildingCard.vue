@@ -1,7 +1,6 @@
 <template>
   <v-card
     class='mx-auto'
-    max-width='344'
   >
     <v-toolbar
       :color='building.Color'
@@ -10,9 +9,9 @@
 
     </v-toolbar>
 
-    <v-toolbar height='100%'>
+    <v-toolbar height='100%' >
       <v-card-title
-        class='justify-center d-flex ml-auto mr-auto text-center'
+        class='justify-center d-flex ml-auto mr-auto text-center pa-0'
         style='word-break: break-word'
       >
 
@@ -83,9 +82,10 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
 .room-card {
   border: 20px black;
   cursor: pointer;
 }
+
 </style>

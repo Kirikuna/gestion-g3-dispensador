@@ -50,7 +50,7 @@
         <v-btn
           color='#65AFFF'
           depressed
-          v-if='$auth.user ? $auth.user.Role === "Admin":false'
+          v-if='!!$auth.user'
           to='/'
           nuxt
         >
@@ -65,7 +65,7 @@
 
       <v-menu
         offset-y
-        transition="scale-transition"
+        v-if='$auth.user'
       >
         <template #activator='{ on, attrs }' >
 
@@ -75,7 +75,7 @@
             v-bind='attrs'
             v-on='on'
             class='pl-2 pr-2'
-            v-if='$auth.user ? true : false'
+            v-if='$auth.user'
           >
 
             <v-avatar

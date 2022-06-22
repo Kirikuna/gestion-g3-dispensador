@@ -1,8 +1,16 @@
+import { filterBuildings, filterStates } from '~/helpers/filters';
+
 export const state = () => ({
-  buildings: null,
+  buildings: [],
+  filteredBuildings: [],
+  filters: {
+    buildingNames: [],
+    states: [],
+  },
 });
 
 export const mutations = {
+  // CRUD
   setBuildings(state, payload) {
     state.buildings = payload;
   },
@@ -26,9 +34,29 @@ export const mutations = {
     );
     building.Rooms.push(payload.room);
   },
+
+  // FILTERS
+  setBuildingNamesFilters(state, buildingNames) {
+    state.filters.buildingNames = buildingNames;
+  },
+
+  setStateFilters(state, states) {
+    state.filters.states = states;
+  },
+
+  filterBuildings(state) {
+    const buildings = [...state.buildings];
+    state.filteredBuildings = filterBuildings(state.filters.buildingNames, buildings);
+  },
+
+  filterStates(state) {
+    const buildings = [...state.filteredBuildings];
+    state.filteredBuildings = filterStates(state.filters.states, buildings);
+  },
 };
 
 export const actions = {
+  // CRUD
   async getBuildings(context) {
     const buildings = await this.$axios.get(
       `${process.env.NUXT_ENV_BACKEND}/edificio/get-all-edificios`,
@@ -47,6 +75,7 @@ export const actions = {
       .catch((error) => {
         console.log(error);
       });
+    context.commit('filterBuildings', context.state.filters.buildingNames);
   },
 
   async editBuilding(context, payload) {
@@ -65,6 +94,7 @@ export const actions = {
       .catch((error) => {
         console.log(error);
       });
+    context.commit('filterBuildings', context.state.filters.buildingNames);
   },
   async deleteBuilding(context, payload) {
     await this.$axios
@@ -77,6 +107,7 @@ export const actions = {
       .catch((error) => {
         console.log(error);
       });
+    context.commit('filterBuildings', context.state.filters.buildingNames);
   },
   async addSala(context, payload) {
     await this.$axios
@@ -90,6 +121,7 @@ export const actions = {
       .catch((error) => {
         console.log(error);
       });
+    context.commit('filterBuildings', context.state.filters.buildingNames);
   },
   async deleteClassRoom(context, payload) {
     await this.$axios
@@ -97,6 +129,7 @@ export const actions = {
       .catch((error) => {
         console.log(error);
       });
+    context.commit('filterBuildings', context.state.filters.buildingNames);
   },
   async updateClassRoom(context, payload) {
     await this.$axios
@@ -106,6 +139,19 @@ export const actions = {
       .catch((error) => {
         console.log(error);
       });
+    context.commit('filterBuildings', context.state.filters.buildingNames);
+  },
+
+  //FILTERS
+
+  async filterBuildings({ commit }, buildingNames) {
+    await commit('setBuildingNamesFilters', buildingNames);
+    await commit('filterBuildings', buildingNames);
+  },
+
+  async filterStates({ commit }, states) {
+    await commit('setStateFilters', states);
+    await commit('filterStates', states);
   },
 };
 
@@ -117,5 +163,8 @@ export const getters = {
     const building = state.buildings.find(
       (building) => building.id === payload.eid,
     );
+  },
+  getFilteredBuildings(state) {
+    return state.filteredBuildings;
   },
 };
