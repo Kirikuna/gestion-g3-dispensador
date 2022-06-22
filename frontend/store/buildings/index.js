@@ -121,6 +121,7 @@ export const actions = {
       .catch((error) => {
         console.log(error);
       });
+    context.commit('filterBuildings', context.state.filters.buildingNames);
   },
   async deleteClassRoom(context, payload) {
     await this.$axios
@@ -128,6 +129,7 @@ export const actions = {
       .catch((error) => {
         console.log(error);
       });
+    context.commit('filterBuildings', context.state.filters.buildingNames);
   },
   async updateClassRoom(context, payload) {
     await this.$axios
@@ -137,6 +139,7 @@ export const actions = {
       .catch((error) => {
         console.log(error);
       });
+    context.commit('filterBuildings', context.state.filters.buildingNames);
   },
 
   //FILTERS

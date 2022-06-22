@@ -50,7 +50,7 @@
         <v-btn
           color='#65AFFF'
           depressed
-          v-if='$auth.user ? $auth.user.Role === "Admin":false'
+          v-if='!!$auth.user'
           to='/'
           nuxt
         >

@@ -19,7 +19,7 @@ const authServices = {
             let userDoc = await userRef.where('Username', '==', username).get();
             userDoc = userDoc.docs[0];
             if (userDoc)
-                return { status: 'failed', code: 409, message: 'Username is used', data: {} };
+                return { status: 'failed', code: 409, message: 'Username is taken', data: {} };
             const salt = bcrypt.genSaltSync(10);
             const passwordHashed = bcrypt.hashSync(password, salt);
 
