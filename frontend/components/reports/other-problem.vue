@@ -26,7 +26,7 @@
             Describe el problema
           </v-card-subtitle>
           <v-card max-width='80%' class='mx-auto'>
-            <v-text-field 
+            <v-text-field
                 v-model="problem"
                 single-line
                 solo
@@ -55,7 +55,7 @@
       </v-card-text>
     </v-row>
     <v-row>
-      
+
     </v-row>
 
   </v-card>
@@ -85,7 +85,7 @@ export default {
   },
   methods:{
     getProblem() {
-      this.$emit('otherProblem', problem);
+      this.$emit('otherProblem', this.problem);
     },
   },
 };
