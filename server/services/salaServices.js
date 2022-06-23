@@ -1,6 +1,9 @@
 const firebase = require('../config/firebase');
 const db = firebase.firestore();
-
+const format = 'es-CL';
+const options = {
+    hour12: false,
+};
 const salaServices = {
     async addSala(eid, name) {
         try {
@@ -13,10 +16,14 @@ const salaServices = {
                 if (match.empty) {
                     const timestamp = firebase.firestore.Timestamp.now();
                     const ts = timestamp.toDate();
-                    const date = ts.toLocaleDateString();
-                    const time = ts.toLocaleTimeString();
+                    const date = ts.toLocaleDateString(format);
+                    const time = ts.toLocaleTimeString(format, options);
 
-                    const log = { Report: 'Solucionado', Date: date, Time: time };
+                    const log = {
+                        Report: 'Solucionado',
+                        Date: date,
+                        Time: time,
+                    };
                     const salaAdd = await salasRef.add({
                         Name: name,
                         State: 0,
@@ -293,17 +300,17 @@ const salaServices = {
             if (salaDoc.exists) {
                 const logsCol = await salaRef.collection('logs').get();
                 const logs = logsCol.docs
-                    .map(logDoc => {
+                    .map((logDoc) => {
                         const ts = logDoc.data().Timestamp.toDate();
-                        const date = ts.toLocaleDateString();
-                        const time = ts.toLocaleTimeString();
+                        const date = ts.toLocaleDateString(format);
+                        const time = ts.toLocaleTimeString(format, options);
                         return {
                             id: logDoc.id,
                             Report: logDoc.data().Report,
                             Date: date,
                             Time: time,
                             ts: ts,
-                        }
+                        };
                     })
                     .sort((a, b) => b.ts.getTime() - a.ts.getTime());
 
@@ -337,8 +344,8 @@ const salaServices = {
             if (salaDoc.exists) {
                 const timestamp = firebase.firestore.Timestamp.now();
                 const ts = timestamp.toDate();
-                const date = ts.toLocaleDateString();
-                const time = ts.toLocaleTimeString();
+                const date = ts.toLocaleDateString(format);
+                const time = ts.toLocaleTimeString(format, options);
 
                 const log = { Report: 'Solucionado', Date: date, Time: time };
                 await salaRef.update({
@@ -393,8 +400,8 @@ const salaServices = {
 
                 const timestamp = firebase.firestore.Timestamp.now();
                 const ts = timestamp.toDate();
-                const date = ts.toLocaleDateString();
-                const time = ts.toLocaleTimeString();
+                const date = ts.toLocaleDateString(format);
+                const time = ts.toLocaleTimeString(format, options);
 
                 const log = { Report: report, Date: date, Time: time };
 
