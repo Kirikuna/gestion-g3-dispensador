@@ -100,6 +100,30 @@ const authServices = {
             };
         }
     },
+    async getAllUsuarios() {
+        try {
+            const usuarios = [];
+            const usuariosRef = db.collection('users');
+            const snapshot = await usuariosRef.get();
+            snapshot.forEach((doc) => {
+                usuarios.push({ id: doc.id, ...doc.data() });
+            });
+
+            return {
+                status: 'success',
+                code: 200,
+                message: 'Usuarios found',
+                data: usuarios,
+            };
+        } catch (error) {
+            return {
+                status: 'failed',
+                code: 500,
+                message: error.trace,
+                data: {},
+            };
+        }
+    },
 };
 
 module.exports = authServices;

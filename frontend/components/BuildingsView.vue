@@ -4,10 +4,10 @@
       justify='space-between'
 
     >
-      <v-col>
+      <v-col v-if='$auth.user ? $auth.user.Role==="Admin":false'>
         <v-row
           justify='start'
-          v-if='$auth.user ? $auth.user.Role==="Admin":false'
+
         >
           <v-col md='4'>
             <v-btn

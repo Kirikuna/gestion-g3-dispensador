@@ -24,6 +24,16 @@ const authController = {
             });
     },
 
+    async getAllUsuarios(req, res) {
+        authServices
+            .getAllUsuarios()
+            .then((usuarios) => {
+                res.status(usuarios.code).json(usuarios);
+            })
+            .catch((err) => {
+                res.status(500).json(err);
+            });
+    },
 };
 
 module.exports = authController;

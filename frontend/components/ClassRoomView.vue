@@ -3,7 +3,10 @@
     class='mx-auto'
     max-width='80%'
   >
-    <v-toolbar :color=colorBuilding height='20px'/>
+    <v-toolbar
+      :color=colorBuilding
+      height='20px'
+    />
 
     <v-row>
       <v-col cols='12'>
@@ -11,8 +14,11 @@
           {{ nameBuilding }}
         </v-card-title>
         <v-card-subtitle class='text-center text-h6'>
-          {{classRoomName}}
-          <v-btn icon @click='dialogAction()'>
+          {{ classRoomName }}
+          <v-btn
+            icon
+            @click='dialogAction()'
+          >
             <v-icon>mdi-pencil</v-icon>
           </v-btn>
         </v-card-subtitle>
@@ -20,45 +26,84 @@
     </v-row>
 
     <v-row>
-      <v-col cols="12"  md='2' xs="12" sm="12" class='align-center pa-6' align-self='end'>
-        <v-card min-height='80px' :color='colorReport' class='align-center'>
+      <v-col
+        cols='12'
+        md='2'
+        xs='12'
+        sm='12'
+        class='align-center pa-6'
+        align-self='end'
+      >
+        <v-card
+          min-height='80px'
+          :color='colorReport'
+          class='align-center'
+        >
           <v-card-title class='justify-center'>
-            <v-icon color='white' size='40px'> mdi-alert-octagon </v-icon>
+            <v-icon
+              color='white'
+              size='40px'
+            > mdi-alert-octagon
+            </v-icon>
           </v-card-title>
-          <v-card-title class='justify-center pt-0'> {{cantReports}} </v-card-title>
-          <v-card-subtitle class='text-center'> Reportes </v-card-subtitle>
+          <v-card-title class='justify-center pt-0'> {{ cantReports }}</v-card-title>
+          <v-card-subtitle class='text-center'> Reportes</v-card-subtitle>
         </v-card>
       </v-col>
       <v-spacer></v-spacer>
-      <v-col cols="12" md='2' xs="12" sm="12" align-self='end' class="pa-6">
-        <v-btn min-width="100%" max-width="100%" @click="solve">
+      <v-col
+        cols='12'
+        md='2'
+        xs='12'
+        sm='12'
+        align-self='end'
+        class='pa-6'
+      >
+        <v-btn
+          min-width='100%'
+          max-width='100%'
+          @click='solve'
+          :disabled='cantReports===0'
+        >
           Solucionar
         </v-btn>
       </v-col>
     </v-row>
-        <v-data-table
-          :headers="header"
-          :items="logs"
-          :items-per-page="10"
-          class="pointer elevation-1"
-          :loading='loadingDT'
-        ></v-data-table>
+    <v-data-table
+      :headers='header'
+      :items='logs'
+      :items-per-page='10'
+      class='pointer elevation-1'
+      :loading='loadingDT'
+    ></v-data-table>
 
-    <v-dialog v-model='dialog' min-width='400px' max-width='400px'>
-      <edit-class-room-card :class-room-name='classRoomName' :classRoomId='classRoomId' @dialogAction='dialogAction'/>
+    <v-dialog
+      v-model='dialog'
+      min-width='400px'
+      max-width='400px'
+    >
+      <edit-class-room-card
+        :class-room-name='classRoomName'
+        :classRoomId='classRoomId'
+        @dialogAction='dialogAction'
+      />
     </v-dialog>
-    <QRGeneration :QRroute='$route.query' :classRoomName='classRoomName' :showLink='true'/>
+    <QRGeneration
+      :QRroute='$route.query'
+      :classRoomName='classRoomName'
+      :showLink='true'
+    />
     <v-snackbar
-      v-model="snackbar"
-      :timeout="timeout"
-      color="success"
+      v-model='snackbar'
+      :timeout='timeout'
+      color='success'
     >
       {{ text }}
-      <template v-slot:action="{ attrs }">
+      <template v-slot:action='{ attrs }'>
         <v-btn
           text
-          v-bind="attrs"
-          @click="snackbar = false"
+          v-bind='attrs'
+          @click='snackbar = false'
         >
           Close
         </v-btn>
@@ -81,7 +126,7 @@ export default {
     nameBuilding: {
       type: String,
       default: null,
-    }
+    },
   },
   name: 'ClassRoom',
   data() {
@@ -95,18 +140,18 @@ export default {
       cantReports: 0,
       text: 'Reporte solucionado',
       header: [
-          {
-            text: 'Mensaje',
-            align: 'center',
-            value: 'Report', 
-            sorteable: false
-          },
-          { text: 'Fecha de reporte', value: 'Date', align: 'center', sorteable: false},
-          { text: 'Hora de reporte', value: 'Time' , align: 'center', sorteable: false},
-        ],
+        {
+          text: 'Mensaje',
+          align: 'center',
+          value: 'Report',
+          sorteable: false,
+        },
+        { text: 'Fecha de reporte', value: 'Date', align: 'center', sorteable: false },
+        { text: 'Hora de reporte', value: 'Time', align: 'center', sorteable: false },
+      ],
       logs: [],
       loadingDT: true,
-    }
+    };
   },
   methods: {
     dialogAction(data) {
@@ -138,7 +183,7 @@ export default {
   async beforeMount() {
     await this.getRoom();
     await this.getLogs();
-  }
+  },
 };
 </script>
 

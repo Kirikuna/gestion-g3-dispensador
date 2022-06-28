@@ -39,7 +39,7 @@
           color='#65AFFF'
           depressed
           v-if='$auth.user ? $auth.user.Role === "Admin": false'
-          to='/indevelopment'
+          to='/personal'
           nuxt
         >
           Personal
