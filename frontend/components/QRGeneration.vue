@@ -3,13 +3,24 @@
     <v-card>
       <v-card-title class='justify-center'>QR de reporte:</v-card-title>
       <v-card-title class='justify-center'>
-        <qrcode-vue id='qr' class-name='mx-auto' :value='qrValue' size='250'></qrcode-vue>
+        <qrcode-vue
+          id='qr'
+          class-name='mx-auto'
+          :value='qrValue'
+          size='250'
+        ></qrcode-vue>
       </v-card-title>
-      <v-card-title v-if="showLink"  class='justify-center'>Link:
+      <v-card-title
+        v-if='showLink'
+        class='justify-center'
+      >Link:
         {{ qrValue }}
       </v-card-title>
       <v-card-actions class='justify-center'>
-        <v-btn class='toggle-button' @click="download()">
+        <v-btn
+          class='toggle-button'
+          @click='download()'
+        >
           Descargar imagen
         </v-btn>
 
@@ -35,10 +46,10 @@ export default {
       console.log();
       return `${process.env.NUXT_ENV_DEPLOY_LINK}/reportar?${new URLSearchParams(this.QRroute).toString()}`;
     },
-    download(){
+    download() {
       const canvas = document.getElementById('qr').getElementsByTagName('canvas');
-      const a = document.createElement("a");
-      a.href  = canvas[0].toDataURL('image/png');
+      const a = document.createElement('a');
+      a.href = canvas[0].toDataURL('image/png');
       a.download = `${this.QRroute.bName}-${this.classRoomName}`;
       a.click();
     },

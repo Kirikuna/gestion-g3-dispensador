@@ -65,9 +65,7 @@ export default {
     }
   },
 
-  router: {
-    middleware: ['auth'] // All pages (except pages that have auth: false) will require login for access
-  },
+
 
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios

@@ -2,9 +2,9 @@ const authServices = require('../services/authServices');
 
 const authController = {
     async register(req, res) {
-        const { firstname, lastname, username, password, role } = req.body;
+        const { Firstname, Lastname, Username, Password, Role } = req.body;
         authServices
-            .register(firstname, lastname, username, password, role)
+            .register(Firstname, Lastname, Username, Password, Role)
             .then((user) => {
                 res.status(user.code).json(user);
             })
@@ -24,6 +24,39 @@ const authController = {
             });
     },
 
+    async getAllUsuarios(req, res) {
+        authServices
+            .getAllUsuarios()
+            .then((usuarios) => {
+                res.status(usuarios.code).json(usuarios);
+            })
+            .catch((err) => {
+                res.status(500).json(err);
+            });
+    },
+    async updateUsuario(req, res) {
+        const { id } = req.params;
+        const { Firstname, Lastname, Username, Password, Role } = req.body;
+        authServices
+            .updateUsuario(id, Firstname, Lastname, Username, Password, Role)
+            .then((usuario) => {
+                res.status(usuario.code).json(usuario);
+            })
+            .catch((err) => {
+                res.status(500).json(err);
+            });
+    },
+    async deleteUsuario(req, res) {
+        const { id } = req.params;
+        authServices.deleteUsuario(id)
+            .then((usuario) => {
+                res.status(usuario.code).json(usuario);
+            })
+            .catch((err) =>{
+                res.status(500).json(err);
+            });
+
+    },
 };
 
 module.exports = authController;
