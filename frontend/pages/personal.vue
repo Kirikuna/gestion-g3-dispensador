@@ -51,7 +51,7 @@
                     md='4'
                   >
                     <v-text-field
-                      v-model='editedItem.firstname'
+                      v-model='editedItem.Firstname'
                       label='Nombre'
                     ></v-text-field>
                   </v-col>
@@ -61,7 +61,17 @@
                     md='4'
                   >
                     <v-text-field
-                      v-model='editedItem.username'
+                      v-model='editedItem.Lastname'
+                      label='Apellido'
+                    ></v-text-field>
+                  </v-col>
+                  <v-col
+                    cols='12'
+                    sm='6'
+                    md='4'
+                  >
+                    <v-text-field
+                      v-model='editedItem.Username'
                       label='Nombre de Usuario'
                     ></v-text-field>
                   </v-col>
@@ -69,21 +79,25 @@
                     cols='12'
                     sm='6'
                     md='4'
+                    v-if='editedIndex === -1'
                   >
                     <v-text-field
-                      v-model='editedItem.building'
-                      label='Edificio'
+                      v-model='editedItem.Password'
+                      label='Contraseña'
+                      type='password'
                     ></v-text-field>
                   </v-col>
+
                   <v-col
                     cols='12'
                     sm='6'
                     md='4'
                   >
-                    <v-text-field
-                      v-model='editedItem.role'
+                    <v-select
+                      v-model='editedItem.Role'
+                      :items="['Admin', 'Reponedor']"
                       label='Rol'
-                    ></v-text-field>
+                    ></v-select>
                   </v-col>
 
                 </v-row>
@@ -97,14 +111,14 @@
                 text
                 @click='close'
               >
-                Cancel
+                Cancelar
               </v-btn>
               <v-btn
                 color='blue darken-1'
                 text
                 @click='save'
               >
-                Save
+                Guardar
               </v-btn>
             </v-card-actions>
           </v-card>
@@ -157,25 +171,23 @@ export default {
       { text: 'Nombre', value: 'Firstname' },
       { text: 'Apellido', value: 'Lastname' },
       { text: 'Nombre de Usuario', value: 'Username' },
-      { text: 'Edificio', value: 'Building' },
       { text: 'Rol', value: 'Role' },
       { text: 'Acciones', value: 'Actions', sortable: false },
     ],
-    users: [],
     editedIndex: -1,
     editedItem: {
-      firstname: '',
-      lastname: '',
-      username: '',
-      building: '',
-      role: '',
+      Firstname: '',
+      Lastname: '',
+      Username: '',
+      Password: '',
+      Role: '',
     },
     defaultItem: {
-      firstname: '',
-      lastname: '',
-      username: '',
-      building: '',
-      role: '',
+      Firstname: '',
+      Lastname: '',
+      Username: '',
+      Password: '',
+      Role: '',
     },
   }),
 
@@ -204,19 +216,7 @@ export default {
 
   methods: {
     async initialize() {
-      /*this.users = [
-        {
-          firstname: 'sdaf',
-          lastname: 'fdgsfdgfsgd',
-          username: 'asdf',
-          building: 'aff',
-          role: 'dfdf',
-        },
-
-      ];*/
-
       await this.$store.dispatch('users/getUsers');
-      this.users = this.$store.getters['users/getUsers'];
     },
 
     editItem(item) {
@@ -254,9 +254,9 @@ export default {
 
     save() {
       if (this.editedIndex > -1) {
-        Object.assign(this.users[this.editedIndex], this.editedItem);
+        this.$store.dispatch('users/updateUser', this.editedItem);
       } else {
-        this.users.push(this.editedItem);
+        this.$store.dispatch('users/registerUser', this.editedItem);
       }
       this.close();
     },

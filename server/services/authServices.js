@@ -87,7 +87,7 @@ const authServices = {
                         Firstname: userDoc.data().Firstname,
                         Lastname: userDoc.data().Lastname,
                         Username: userDoc.data().Username,
-                        Role: userDoc.data().Role
+                        Role: userDoc.data().Role,
                     }, 'abc123'),
                 },
             };
@@ -115,6 +115,55 @@ const authServices = {
                 message: 'Usuarios found',
                 data: usuarios,
             };
+        } catch (error) {
+            return {
+                status: 'failed',
+                code: 500,
+                message: error.trace,
+                data: {},
+            };
+        }
+    },
+    async updateUsuario(id, firstname, lastname, username, role) {
+        try {
+            const usuarioRef = db.collection('users').doc(id);
+            const usuarioDoc = await usuarioRef.get();
+
+            if (usuarioDoc.exists) {
+
+                const userRef = db.collection('users');
+                let userDoc = await userRef.where('Username', '==', username).get();
+                userDoc = userDoc.docs[0];
+                if (userDoc && username !== userDoc.data().Username)
+                    return { status: 'failed', code: 409, message: 'Username is taken', data: {} };
+
+                await usuarioRef.update({
+                    Firstname: firstname,
+                    Lastname: lastname,
+                    Username: username,
+                    Role: role,
+                });
+                return {
+                    status: 'success',
+                    code: 200,
+                    message: 'Usuario updated successfully',
+                    data: {
+                        id: id,
+                        Firstname: firstname,
+                        Lastname: lastname,
+                        Username: username,
+                        Role: role,
+
+                    },
+                };
+            } else {
+                return {
+                    status: 'failed',
+                    code: 404,
+                    message: 'No Usuario data found',
+                    data: {},
+                };
+            }
         } catch (error) {
             return {
                 status: 'failed',
