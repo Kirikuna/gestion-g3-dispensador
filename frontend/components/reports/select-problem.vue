@@ -3,7 +3,10 @@
     class='ma-auto'
     max-width='400px'
   >
-    <v-toolbar :color="colorBuilding" height='20px'/>
+    <v-toolbar
+      :color='colorBuilding'
+      height='20px'
+    />
 
     <v-row>
       <v-col>
@@ -16,11 +19,24 @@
       </v-col>
     </v-row>
 
-    <v-row v-for='(option, index) in options' :key='index'>
+    <v-row
+      v-for='(option, index) in options'
+      :key='index'
+    >
       <v-col cols='12'>
-        <v-card class='mx-auto option-card v-card--hover ' :color='option.color' max-width='95%' @click.native='selectedProblem(option.problem)'>
+        <v-card
+          class='mx-auto option-card v-card--hover '
+          :color='option.color'
+          max-width='95%'
+          @click.native='selectedProblem(option.problem)'
+        >
           <v-card-title class='justify-center mb-3'>
-            <v-icon large color="white darken-2"> {{ option.icon }} </v-icon> {{option.problem}}
+            <v-icon
+              large
+              color='white darken-2'
+            > {{ option.icon }}
+            </v-icon>
+            {{ option.problem }}
           </v-card-title>
           <v-card-subtitle class='text-center'>
             {{ option.description }}
@@ -29,21 +45,28 @@
       </v-col>
     </v-row>
 
-    <v-row >
+    <v-row v-if='!$auth.user'>
       <v-card-text class='ma-auto text-center'>
         ¿Eres parte del personal?
-        <br/>
+        <br />
         Ingresa para solucionar
-        <br/>
-        <br/>
-        <v-btn small color="success">
+        <br />
+        <br />
+        <v-btn
+          small
+          color='success'
+          @click='dialog = true'
+        >
           Ingresar
         </v-btn>
       </v-card-text>
     </v-row>
-    <v-row>
-      
-    </v-row>
+    <v-dialog v-model='dialog'>
+      <SignIn
+        :redirect='$route'
+        @closeDialog='closeDialog'
+      ></SignIn>
+    </v-dialog>
 
   </v-card>
 </template>
@@ -65,8 +88,9 @@ export default {
       default: null,
     },
   },
-  data(){
+  data() {
     return {
+      dialog: false,
       options: [
         {
           problem: 'Sin Alcohol',
@@ -87,18 +111,24 @@ export default {
           color: '#B1B1B1',
         },
       ],
-    }
+    };
   },
-  methods:{
+  methods: {
     selectedProblem(problem) {
       this.$emit('selectedProblem', problem);
+    },
+    closeDialog(data) {
+      if (data !== undefined) {
+        console.log(data);
+        this.dialog = data;
+      }
     },
   },
 };
 </script>
 
 <style scoped>
-  .option-card{
-    cursor: pointer;
-  }
+.option-card {
+  cursor: pointer;
+}
 </style>

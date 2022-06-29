@@ -12,9 +12,9 @@
       </v-card-title>
       <v-card-title
         v-if='showLink'
-        class='justify-center'
-      >Link:
-        {{ qrValue }}
+        class='text-center'
+      >
+        <a :href='qrValue'>{{ qrValue }}</a>
       </v-card-title>
       <v-card-actions class='justify-center'>
         <v-btn

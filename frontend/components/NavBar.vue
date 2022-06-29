@@ -20,18 +20,11 @@
           to='/indevelopment'
           nuxt
         >
-          Todos los edificios
+          Todos los QR
         </v-btn>
         <v-spacer
           v-if='$auth.user ? $auth.user.Role === "Admin" || $auth.user.Role === "Reponedor" : false'
         ></v-spacer>
-        <v-btn
-          color='#65AFFF'
-          depressed
-          v-if='$auth.user ? $auth.user.Role === "Reponedor" : false'
-        >
-          Reportes Activos
-        </v-btn>
         <v-spacer
           v-if='$auth.user ? $auth.user.Role === "Reponedor": false'
         ></v-spacer>
@@ -67,7 +60,7 @@
         offset-y
         v-if='$auth.user'
       >
-        <template #activator='{ on, attrs }' >
+        <template #activator='{ on, attrs }'>
 
           <v-btn
             text
@@ -139,10 +132,26 @@
             </v-btn>
           </v-list-item>
           <v-spacer />
-
-
         </v-list>
       </v-menu>
+      <v-btn
+        text
+        color='white'
+        class='pl-2 pr-2'
+        @click='$router.push("/auth/signin")'
+        v-if='!$auth.user'
+      >
+
+        <v-avatar
+          size='30'
+          class='mr-2'
+        >
+          <v-icon>
+            mdi-login
+          </v-icon>
+        </v-avatar>
+        Iniciar sesión
+      </v-btn>
 
     </v-app-bar>
   </div>
@@ -161,6 +170,7 @@ export default {
     async logOut() {
       await this.$auth.logout();
       await this.$cookies.remove('token');
+      console.log(this.$auth.user);
     },
   },
 };

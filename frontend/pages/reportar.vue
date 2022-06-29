@@ -2,12 +2,23 @@
   <div
     v-if='show'
   >
-    <select-problem :nameRoom='classroom' :nameBuilding='$route.query.bName' :colorBuilding='$route.query.bColor' @selectedProblem='selected' />
+    <select-problem
+      :nameRoom='classroom'
+      :nameBuilding='$route.query.bName'
+      :colorBuilding='$route.query.bColor'
+      @selectedProblem='selected'
+    />
+
   </div>
   <div
     v-else-if='otherProblem'
   >
-      <other-problem :nameRoom='classroom' :nameBuilding='$route.query.bName' :colorBuilding='$route.query.bColor' @otherProblem='problem'/>
+    <other-problem
+      :nameRoom='classroom'
+      :nameBuilding='$route.query.bName'
+      :colorBuilding='$route.query.bColor'
+      @otherProblem='problem'
+    />
   </div>
   <div
     v-else
@@ -19,6 +30,7 @@
 <script>
 import SelectProblem from '~/components/reports/select-problem';
 import OtherProblem from '~/components/reports/other-problem';
+
 export default {
   auth: false,
   name: 'reportar',
@@ -28,14 +40,14 @@ export default {
       classroom: null,
       show: true,
       otherProblem: false,
-    }
+    };
   },
-  methods:{
+  methods: {
     async selected(data) {
       if (data !== undefined) {
         if (data !== 'Otro problema') {
-          await this.$axios.put(`${process.env.NUXT_ENV_BACKEND}/sala/report-sala/${this.$route.query.id}`, {report: data});
-          this.$router.push({name: "successfulreport"});
+          await this.$axios.put(`${process.env.NUXT_ENV_BACKEND}/sala/report-sala/${this.$route.query.id}`, { report: data });
+          this.$router.push({ name: 'successfulreport' });
         } else {
           this.otherProblem = true;
           this.show = false;
@@ -46,8 +58,8 @@ export default {
     },
     async problem(data) {
       if (data !== undefined) {
-        await this.$axios.put(`${process.env.NUXT_ENV_BACKEND}/sala/report-sala/${this.$route.query.id}`, {report: data});
-        this.$router.push({name: "successfulreport"});
+        await this.$axios.put(`${process.env.NUXT_ENV_BACKEND}/sala/report-sala/${this.$route.query.id}`, { report: data });
+        this.$router.push({ name: 'successfulreport' });
       }
     },
   },

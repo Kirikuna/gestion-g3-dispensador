@@ -3,7 +3,10 @@
     class='ma-auto'
     max-width='400px'
   >
-    <v-toolbar :color="colorBuilding" height='20px'/>
+    <v-toolbar
+      :color='colorBuilding'
+      height='20px'
+    />
 
     <v-row>
       <v-col>
@@ -18,45 +21,69 @@
 
     <v-row>
       <v-col cols='12'>
-        <v-card class='text-center mx-auto' color='#B1B1B1' max-width='95%'>
+        <v-card
+          class='text-center mx-auto'
+          color='#B1B1B1'
+          max-width='95%'
+        >
           <v-card-title class='justify-center mb-3'>
-            <v-icon large color="white darken-2"> mdi-wrench-clock </v-icon> Otro problema
+            <v-icon
+              large
+              color='white darken-2'
+            > mdi-wrench-clock
+            </v-icon>
+            Otro problema
           </v-card-title>
           <v-card-subtitle class='text-center'>
             Describe el problema
           </v-card-subtitle>
-          <v-card max-width='80%' class='mx-auto'>
+          <v-card
+            max-width='80%'
+            class='mx-auto'
+          >
             <v-text-field
-                v-model="problem"
-                single-line
-                solo
-                label="Problema"
-                counter
-                maxlength="15"
+              v-model='problem'
+              single-line
+              solo
+              label='Problema'
+              counter
+              maxlength='15'
             />
           </v-card>
-          <v-btn class="mt-3 mb-3" color="info" @click.native='getProblem()' :disabled='problem.length === 0'>
+          <v-btn
+            class='mt-3 mb-3'
+            color='info'
+            @click.native='getProblem()'
+            :disabled='problem.length === 0'
+          >
             Reportar
           </v-btn>
         </v-card>
       </v-col>
     </v-row>
 
-    <v-row >
+    <v-row v-if='!$auth.user'>
       <v-card-text class='ma-auto text-center'>
         ¿Eres parte del personal?
-        <br/>
+        <br />
         Ingresa para solucionar
-        <br/>
-        <br/>
-        <v-btn small color="success">
+        <br />
+        <br />
+        <v-btn
+          small
+          color='success'
+          @click='dialog = true'
+        >
           Ingresar
         </v-btn>
       </v-card-text>
     </v-row>
-    <v-row>
-
-    </v-row>
+    <v-dialog v-model='dialog'>
+      <SignIn
+        :redirect='$route'
+        @closeDialog='closeDialog'
+      ></SignIn>
+    </v-dialog>
 
   </v-card>
 </template>
@@ -78,15 +105,27 @@ export default {
       default: null,
     },
   },
-  data(){
+  data() {
     return {
-        problem: '',
-    }
+      problem: '',
+      dialog: false,
+    };
   },
-  methods:{
+  methods: {
     getProblem() {
       this.$emit('otherProblem', this.problem);
     },
+
+    closeDialog(data) {
+      if (data !== undefined) {
+        console.log(data);
+        this.dialog = data;
+      }
+    },
+  },
+
+  beforeMount() {
+    this.dialog = false;
   },
 };
 </script>

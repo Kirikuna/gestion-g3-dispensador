@@ -18,6 +18,7 @@
           <v-btn
             icon
             @click='dialogAction()'
+            v-if='$auth.user ? $auth.user.Role==="Admin":false'
           >
             <v-icon>mdi-pencil</v-icon>
           </v-btn>
@@ -46,8 +47,8 @@
             > mdi-alert-octagon
             </v-icon>
           </v-card-title>
-          <v-card-title class='justify-center pt-0'> {{ cantReports }}</v-card-title>
-          <v-card-subtitle class='text-center'> Reportes</v-card-subtitle>
+          <v-card-title class='justify-center white--text font-weight-bold pt-0'> {{ cantReports }}</v-card-title>
+          <v-card-subtitle class='text-center white--text font-weight-bold'> Reportes</v-card-subtitle>
         </v-card>
       </v-col>
       <v-spacer></v-spacer>
@@ -163,7 +164,7 @@ export default {
       this.classRoom = await this.$axios.get(`${process.env.NUXT_ENV_BACKEND}/sala/get-sala/${this.classRoomId}`);
       this.classRoom = this.classRoom.data.data;
       this.cantReports = this.classRoom.NumberOfReports;
-      this.colorReport = this.classRoom.State === 0 ? 'success' : this.classRoom.State === 1 ? 'warning' : 'danger';
+      this.colorReport = this.classRoom.State === 0 ? 'success' : this.classRoom.State === 1 ? 'warning' : 'error';
       this.classRoomName = this.classRoom.Name;
     },
     async getLogs() {
