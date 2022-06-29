@@ -5,6 +5,11 @@
     :search='search'
     sort-by='calories'
     class='elevation-1'
+    :footer-props="{
+      'items-per-page-text':'Usuarios por página',
+
+    }"
+
   >
     <template v-slot:top>
       <v-toolbar
@@ -165,6 +170,9 @@
         Editar
       </v-btn>
 
+    </template>
+    <template v-slot:no-data>
+      No hay usuarios
     </template>
   </v-data-table>
 </template>
