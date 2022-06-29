@@ -42,66 +42,73 @@
               <span class='text-h5'>{{ formTitle }}</span>
             </v-card-title>
 
-            <v-card-text>
-              <v-container>
-                <v-row>
-                  <v-col
-                    cols='12'
-                    sm='6'
-                    md='4'
-                  >
-                    <v-text-field
-                      v-model='editedItem.Firstname'
-                      label='Nombre'
-                    ></v-text-field>
-                  </v-col>
-                  <v-col
-                    cols='12'
-                    sm='6'
-                    md='4'
-                  >
-                    <v-text-field
-                      v-model='editedItem.Lastname'
-                      label='Apellido'
-                    ></v-text-field>
-                  </v-col>
-                  <v-col
-                    cols='12'
-                    sm='6'
-                    md='4'
-                  >
-                    <v-text-field
-                      v-model='editedItem.Username'
-                      label='Nombre de Usuario'
-                    ></v-text-field>
-                  </v-col>
-                  <v-col
-                    cols='12'
-                    sm='6'
-                    md='4'
-                    v-if='editedIndex === -1'
-                  >
-                    <v-text-field
-                      v-model='editedItem.Password'
-                      label='Contraseña'
-                      type='password'
-                    ></v-text-field>
-                  </v-col>
+            <v-card-text >
+              <v-form v-model='formValidate.valid'>
+                <v-container>
+                  <v-row>
+                    <v-col
+                      cols='12'
+                      sm='6'
+                      md='4'
+                    >
+                      <v-text-field
+                        v-model='editedItem.Firstname'
+                        label='Nombre'
+                        :rules='formValidate.firstnameRules'
+                      ></v-text-field>
+                    </v-col>
+                    <v-col
+                      cols='12'
+                      sm='6'
+                      md='4'
+                    >
+                      <v-text-field
+                        v-model='editedItem.Lastname'
+                        label='Apellido'
+                        :rules='formValidate.lastnameRules'
+                      ></v-text-field>
+                    </v-col>
+                    <v-col
+                      cols='12'
+                      sm='6'
+                      md='4'
+                    >
+                      <v-text-field
+                        v-model='editedItem.Username'
+                        label='Nombre de Usuario'
+                        :rules='formValidate.usernameRules'
+                      ></v-text-field>
+                    </v-col>
+                    <v-col
+                      cols='12'
+                      sm='6'
+                      md='4'
+                      v-if='editedIndex === -1'
+                    >
+                      <v-text-field
+                        v-model='editedItem.Password'
+                        label='Contraseña'
+                        type='password'
+                        :rules='formValidate.passwordRules'
+                      ></v-text-field>
+                    </v-col>
 
-                  <v-col
-                    cols='12'
-                    sm='6'
-                    md='4'
-                  >
-                    <v-select
-                      v-model='editedItem.Role'
-                      :items="['Admin', 'Reponedor']"
-                      label='Rol'
-                    ></v-select>
-                  </v-col>
+                    <v-col
+                      cols='12'
+                      sm='6'
+                      md='4'
+                    >
+                      <v-select
+                        v-model='editedItem.Role'
+                        :items="['Admin', 'Reponedor']"
+                        label='Rol'
+                        :rules='formValidate.roleRules'
+                      ></v-select>
+                    </v-col>
 
-                </v-row>
-              </v-container>
+                  </v-row>
+                </v-container>
+              </v-form>
             </v-card-text>
 
             <v-card-actions>
@@ -117,6 +124,7 @@
                 color='blue darken-1'
                 text
                 @click='save'
+                :disabled='!formValidate.valid'
               >
                 Guardar
               </v-btn>
@@ -188,6 +196,26 @@ export default {
       Username: '',
       Password: '',
       Role: '',
+    },
+
+    formValidate: {
+      valid: false,
+      firstnameRules: [
+        v => !!v || 'El nombre es requerido',
+      ],
+      lastnameRules: [
+        v => !!v || 'El apellido es requerido',
+      ],
+      usernameRules: [
+        v => !!v || 'El nombre de usuario es requerido',
+      ],
+      passwordRules: [
+        v => !!v || 'La contraseña es requerida',
+      ],
+      roleRules: [
+        v => !!v || 'El rol es requerido',
+      ],
+
     },
   }),
 
