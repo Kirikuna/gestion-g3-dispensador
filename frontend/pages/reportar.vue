@@ -35,7 +35,7 @@ export default {
       if (data !== undefined) {
         if (data !== 'Otro problema') {
           await this.$axios.put(`${process.env.NUXT_ENV_BACKEND}/sala/report-sala/${this.$route.query.id}`, {report: data});
-          this.$router.push({name: "index"});
+          this.$router.push({name: "successfulreport"});
         } else {
           this.otherProblem = true;
           this.show = false;
@@ -47,7 +47,7 @@ export default {
     async problem(data) {
       if (data !== undefined) {
         await this.$axios.put(`${process.env.NUXT_ENV_BACKEND}/sala/report-sala/${this.$route.query.id}`, {report: data});
-        this.$router.push({name: "index"});
+        this.$router.push({name: "successfulreport"});
       }
     },
   },
