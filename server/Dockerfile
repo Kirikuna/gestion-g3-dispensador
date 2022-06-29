@@ -1,6 +1,8 @@
 FROM node:16-alpine
 
 RUN apk --no-cache add curl
+RUN apk add -U tzdata
+ENV TZ=America/Santiago
 
 WORKDIR /app
 
