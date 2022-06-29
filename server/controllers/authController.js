@@ -46,6 +46,17 @@ const authController = {
                 res.status(500).json(err);
             });
     },
+    async deleteUsuario(req, res) {
+        const { id } = req.params;
+        authServices.deleteUsuario(id)
+            .then((usuario) => {
+                res.status(usuario.code).json(usuario);
+            })
+            .catch((err) =>{
+                res.status(500).json(err);
+            });
+
+    },
 };
 
 module.exports = authController;

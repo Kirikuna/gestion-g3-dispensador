@@ -7,14 +7,17 @@ export const mutations = {
     state.users = payload;
   },
   updateUser(state, user) {
-    console.log(user);
-    console.log(state.users);
     const item = state.users.find((item) => item.id === user.id);
-    console.log(item);
     Object.assign(item, user);
   },
   registerUser(state, user) {
     state.users.push(user);
+  },
+  deleteUser(state, payload) {
+    const index = state.users.findIndex(
+      (user) => user.id === payload,
+    );
+    state.users.splice(index, 1);
   },
 };
 
@@ -46,6 +49,18 @@ export const actions = {
       .then((data) => {
         console.log(data.data.data);
         context.commit('updateUser', data.data.data);
+      })
+      .catch((error) => {
+          console.log(error);
+        },
+      );
+  },
+
+  async deleteUser(context, payload) {
+    await this.$axios.delete(`/auth/delete-usuario/${payload}`)
+      .then((data) => {
+        console.log(data.data.data);
+        context.commit('deleteUser', data.data.data);
       })
       .catch((error) => {
           console.log(error);

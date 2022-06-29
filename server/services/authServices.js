@@ -184,6 +184,35 @@ const authServices = {
             };
         }
     },
+    async deleteUsuario(id) {
+        try {
+            const usuarioRef = db.collection('users').doc(id);
+            const usuarioDoc = await usuarioRef.get();
+            if (usuarioDoc.exists) {
+                await usuarioRef.delete();
+                return {
+                    status: 'success',
+                    code: 200,
+                    message: 'Usuario deleted successfully',
+                    data: id,
+                };
+            } else {
+                return {
+                    status: 'failed',
+                    code: 404,
+                    message: 'No Usuario data found',
+                    data: {},
+                };
+            }
+        } catch (error) {
+            return {
+                status: 'failed',
+                code: 500,
+                message: error.trace,
+                data: {},
+            };
+        }
+    },
 };
 
 module.exports = authServices;

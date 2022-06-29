@@ -119,7 +119,8 @@
               <v-btn
                 color='error'
                 text
-                @click='close'
+                @click='deleteItem'
+                v-if='editedIndex!==-1'
               >
                 Eliminar
               </v-btn>
@@ -269,14 +270,12 @@ export default {
       this.dialog = true;
     },
 
-    deleteItem(item) {
-      this.editedIndex = this.users.indexOf(item);
-      this.editedItem = Object.assign({}, item);
+    deleteItem() {
       this.dialogDelete = true;
     },
 
     deleteItemConfirm() {
-      this.users.splice(this.editedIndex, 1);
+      this.$store.dispatch('users/deleteUser', this.editedItem.id);
       this.closeDelete();
     },
 
@@ -290,6 +289,7 @@ export default {
 
     closeDelete() {
       this.dialogDelete = false;
+      this.dialog = false;
       this.$nextTick(() => {
         this.editedItem = Object.assign({}, this.defaultItem);
         this.editedIndex = -1;
