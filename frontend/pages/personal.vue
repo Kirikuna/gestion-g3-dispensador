@@ -47,7 +47,7 @@
               <span class='text-h5'>{{ formTitle }}</span>
             </v-card-title>
 
-            <v-card-text >
+            <v-card-text>
               <v-form v-model='formValidate.valid'>
                 <v-container>
                   <v-row>
@@ -88,13 +88,12 @@
                       cols='12'
                       sm='6'
                       md='4'
-                      v-if='editedIndex === -1'
                     >
                       <v-text-field
                         v-model='editedItem.Password'
                         label='Contraseña'
                         type='password'
-                        :rules='formValidate.passwordRules'
+                        :rules='editedIndex === -1 ? formValidate.passwordRules : []'
                       ></v-text-field>
                     </v-col>
 
@@ -117,7 +116,13 @@
             </v-card-text>
 
             <v-card-actions>
-              <v-spacer></v-spacer>
+              <v-btn
+                color='error'
+                text
+                @click='close'
+              >
+                Eliminar
+              </v-btn>
               <v-btn
                 color='blue darken-1'
                 text
@@ -125,6 +130,8 @@
               >
                 Cancelar
               </v-btn>
+              <v-spacer></v-spacer>
+
               <v-btn
                 color='blue darken-1'
                 text
@@ -148,7 +155,7 @@
                 color='blue darken-1'
                 text
                 @click='closeDelete'
-              >Cancel
+              >Cancelar
               </v-btn>
               <v-btn
                 color='blue darken-1'
@@ -218,8 +225,7 @@ export default {
         v => !!v || 'El nombre de usuario es requerido',
       ],
       passwordRules: [
-        v => !!v || 'La contraseña es requerida',
-      ],
+        v => !!v || 'La contraseña es requerida'],
       roleRules: [
         v => !!v || 'El rol es requerido',
       ],
@@ -253,11 +259,13 @@ export default {
   methods: {
     async initialize() {
       await this.$store.dispatch('users/getUsers');
+      console.log(this.users);
     },
 
     editItem(item) {
       this.editedIndex = this.users.indexOf(item);
       this.editedItem = Object.assign({}, item);
+      console.log(this.editedItem);
       this.dialog = true;
     },
 
@@ -289,6 +297,7 @@ export default {
     },
 
     save() {
+      console.log(this.editedItem);
       if (this.editedIndex > -1) {
         this.$store.dispatch('users/updateUser', this.editedItem);
       } else {

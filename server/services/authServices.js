@@ -106,7 +106,10 @@ const authServices = {
             const usuariosRef = db.collection('users');
             const snapshot = await usuariosRef.get();
             snapshot.forEach((doc) => {
-                usuarios.push({ id: doc.id, ...doc.data() });
+                let {Password, ...usuario} = doc.data()
+                usuario.id = doc.id;
+                console.log(usuario.id);
+                usuarios.push({ id: usuario.id, ...usuario });
             });
 
             return {
@@ -124,7 +127,7 @@ const authServices = {
             };
         }
     },
-    async updateUsuario(id, firstname, lastname, username, role) {
+    async updateUsuario(id, firstname, lastname, username, password, role) {
         try {
             const usuarioRef = db.collection('users').doc(id);
             const usuarioDoc = await usuarioRef.get();
@@ -137,12 +140,20 @@ const authServices = {
                 if (userDoc && username !== userDoc.data().Username)
                     return { status: 'failed', code: 409, message: 'Username is taken', data: {} };
 
-                await usuarioRef.update({
+                const userUpdated = {
                     Firstname: firstname,
                     Lastname: lastname,
                     Username: username,
                     Role: role,
-                });
+                }
+
+                if(password) {
+                    const salt = bcrypt.genSaltSync(10);
+                    userUpdated.Password = bcrypt.hashSync(password, salt);
+                }
+
+                console.log(userUpdated);
+                await usuarioRef.update(userUpdated);
                 return {
                     status: 'success',
                     code: 200,

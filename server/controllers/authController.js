@@ -36,9 +36,9 @@ const authController = {
     },
     async updateUsuario(req, res) {
         const { id } = req.params;
-        const { Firstname, Lastname, Username, Role } = req.body;
+        const { Firstname, Lastname, Username, Password, Role } = req.body;
         authServices
-            .updateUsuario(id, Firstname, Lastname, Username, Role)
+            .updateUsuario(id, Firstname, Lastname, Username, Password, Role)
             .then((usuario) => {
                 res.status(usuario.code).json(usuario);
             })
