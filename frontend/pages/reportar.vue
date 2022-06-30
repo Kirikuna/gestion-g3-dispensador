@@ -6,6 +6,7 @@
       :nameRoom='classroom'
       :nameBuilding='$route.query.bName'
       :colorBuilding='$route.query.bColor'
+      :classRoomId='$route.query.id'
       @selectedProblem='selected'
     />
 
@@ -17,6 +18,7 @@
       :nameRoom='classroom'
       :nameBuilding='$route.query.bName'
       :colorBuilding='$route.query.bColor'
+      :classRoomId='$route.query.id'
       @otherProblem='problem'
     />
   </div>
@@ -51,8 +53,6 @@ export default {
         } else {
           this.otherProblem = true;
           this.show = false;
-          console.log(this.otherProblem);
-          console.log(this.show);
         }
       }
     },

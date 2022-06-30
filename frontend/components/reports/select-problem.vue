@@ -61,6 +61,18 @@
         </v-btn>
       </v-card-text>
     </v-row>
+    <v-row v-else>
+       <v-card-text class='ma-auto text-center'>
+        <br />
+        <v-btn
+          small
+          color='success'
+          @click="solve"
+        >
+          Solucionar
+        </v-btn>
+      </v-card-text>
+    </v-row>
     <v-dialog v-model='dialog'>
       <SignIn
         :redirect='$route'
@@ -87,6 +99,10 @@ export default {
       type: String,
       default: null,
     },
+    classRoomId: {
+      type: String,
+      default: null,
+    }
   },
   data() {
     return {
@@ -122,6 +138,10 @@ export default {
         console.log(data);
         this.dialog = data;
       }
+    },
+    async solve(){
+      await this.$axios.put(`${process.env.NUXT_ENV_BACKEND}/sala/solve-sala/${this.classRoomId}`);
+      this.$router.push({ name: 'successfulreport' });
     },
   },
 };
